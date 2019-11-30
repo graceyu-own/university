@@ -14,3 +14,7 @@
 # Jetbrains
 .idea
 .idea/
+.idea/*
+.vscode
+.vscode/
+.vscode/*
