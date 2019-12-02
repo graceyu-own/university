@@ -19,7 +19,7 @@
         <div class="index-content" ref="indexContent">
             <transition name="effect-fromBottomToTop-opacity">
                 <div class="content-buttons" v-if="contentButtonsDisplay">
-                    <button @click="showLogin()">登录</button>
+                    <button @click="showLogin()" class="common-font">Log In</button>
                 </div>
             </transition>
         </div>
