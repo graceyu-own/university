@@ -1,0 +1,36 @@
+@-webkit-keyframes rotation{
+    from {-webkit-transform: rotate(0deg);}
+    to {-webkit-transform: rotate(360deg);}
+}
+
+.auto-rotation{
+    -webkit-transform: rotate(360deg);
+    animation: rotation 3s linear infinite;
+    -moz-animation: rotation 3s linear infinite;
+    -webkit-animation: rotation 3s linear infinite;
+    -o-animation: rotation 3s linear infinite;
+}
+
+.effect-fromBottomToTop-opacity-enter-active {
+    transition: all 2.89s ease;
+}
+.effect-fromBottomToTop-opacity-leave-active {
+    transition: all 2.89s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.effect-fromBottomToTop-opacity-enter, .effect-fromBottomToTop-opacity-leave-to
+    /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateY(50px);
+    opacity: 0;
+}
+
+.effect-fromBottomToTop-enter-active {
+    transition: all 0.59s ease;
+}
+
+.effect-fromBottomToTop-leave-active {
+    transition: all 0.59s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.effect-fromBottomToTop-enter, .effect-fromBottomToTop-leave-to
+    /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateY(200px);
+}
