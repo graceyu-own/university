@@ -21,5 +21,9 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
+
+        & /deep/ .el-notification {
+            padding: 5px !important;
+        }
     }
 </style>

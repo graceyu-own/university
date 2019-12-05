@@ -12,28 +12,33 @@
             <div class="background-before"></div>
             <div class="background-after" ref="backgroundAfter"></div>
         </div>
-        <div class="index-marker"></div>
-        <svg class="icon index-loading auto-rotation" aria-hidden="true" ref="indexLoading">
+        <div class="index-mask"></div>
+        <svg class="icon index-loading auto-rotation" aria-hidden="true" ref="loading">
             <use xlink:href="#retUI-loading"></use>
         </svg>
-        <div class="index-content" ref="indexContent">
+        <div class="index-content">
             <transition name="effect-fromBottomToTop-opacity">
                 <div class="content-buttons" v-if="contentButtonsDisplay">
-                    <button @click="showLogin()" class="common-font">Log In</button>
+                    <el-row>
+                        <el-col :span="24"><button @click="ToLogin()">Log In</button></el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24"><button @click="ToHome()">HOME</button></el-col>
+                    </el-row>
                 </div>
             </transition>
         </div>
-        <transition name="effect-fromBottomToTop">
-            <Login v-if="loginDisplay"></Login>
-        </transition>
     </section>
 </template>
 
 <script>
-    import Login from "@/components/auth/Login";
+
     export default {
         name: "Index",
-        components: {Login},
+
+        components: {
+        },
+
         data() {
             return {
                 contentButtonsDisplay: false,
@@ -43,26 +48,36 @@
 
         methods: {
 
-            showLogin: function() {
-                this.loginDisplay = true;
+            ToLogin: function() {
+                this.$router.push("/auth/login");
+            },
+
+            ToHome: function() {
+                this.$router.push("/center");
+            },
+
+            Init: function() {
+
+                let image = new Image();
+                image.src = "https://basic-images-1252577698.cos.ap-shenzhen-fsi.myqcloud.com/5.jpg";
+
+
+                let _this = this;
+                image.onload = function() {
+                    setTimeout(() => {
+                        _this.$refs.backgroundAfter.style.backgroundImage = "url("+ image.src +")";
+                        _this.$refs.backgroundAfter.style.opacity = "1";
+                        _this.$refs.loading.remove();
+                        _this.contentButtonsDisplay = true;
+                    }, 1500)
+                }
             }
         },
 
         mounted() {
 
-            let image = new Image();
-            image.src = "https://basic-images-1252577698.cos.ap-shenzhen-fsi.myqcloud.com/5.jpg";
-
-            let _this = this;
-            image.onload = function() {
-                setTimeout(() => {
-                    _this.$refs.backgroundAfter.style.backgroundImage = "url("+ image.src +")";
-                    _this.$refs.backgroundAfter.style.opacity = "1";
-                    _this.$refs.indexLoading.remove();
-                    _this.contentButtonsDisplay = true;
-                }, 1500)
-            }
-        }
+            this.Init();
+        },
     }
 </script>
 
@@ -101,7 +116,7 @@
             }
         }
 
-        & > .index-marker {
+        & > .index-mask {
             width: inherit;
             height: inherit;
             position: absolute; top: 0; left: 0;
@@ -112,7 +127,7 @@
         & > .index-loading {
             position: absolute; top: 10px; right: 10px;
             z-index: 10;
-            font-size: 1.2rem;
+            font-size: 2.4rem;
             color: #fff;
         }
 
@@ -127,7 +142,11 @@
                 position: absolute; bottom: 80px; left: 0;
                 text-align: center;
 
-                & > button {
+                & > div {
+                    margin-top: 20px;
+                }
+
+                &  button {
                     width: calc(120px + 15vw);
                     height: calc(30px + 2.5vh);
                     background-color: rgba(0, 0, 0, 0);
@@ -140,11 +159,19 @@
                     transition: background-color 666ms, color 666ms;
                 }
 
-                & > button:hover {
+                &  button:hover {
                     background-color: rgba(255, 255, 255, 1);
                     color: #000;
                 }
             }
+        }
+
+        & > .index-popupMarker {
+            width: inherit;
+            height: inherit;
+            position: absolute; top: 0; left: 0;
+            z-index: 12;
+            background-color: rgba(255, 255, 255, 0.6);
         }
     }
 </style>

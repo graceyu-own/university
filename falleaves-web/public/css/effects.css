@@ -24,13 +24,13 @@
 }
 
 .effect-fromBottomToTop-enter-active {
-    transition: all 0.59s ease;
+    transition: all 666ms ease;
 }
 
 .effect-fromBottomToTop-leave-active {
-    transition: all 0.59s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: all 666ms ease;
 }
 .effect-fromBottomToTop-enter, .effect-fromBottomToTop-leave-to
     /* .slide-fade-leave-active for below version 2.1.8 */ {
-    transform: translateY(200px);
+    transform: translateY(400px);
 }
