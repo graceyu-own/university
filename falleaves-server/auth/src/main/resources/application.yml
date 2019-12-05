@@ -1,0 +1,23 @@
+server:
+    port: 8110
+
+eureka:
+    instance:
+        hostname: localhost
+    client:
+        service-url:
+            defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+            
+spring:
+    application:
+        name: auth
+    datasource:
+        url: jdbc:mysql://graceyu.top:3306/falleaves
+        username: falleaves
+        password: 123456
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        database: mysql
+        show-sql: true
+        hibernate:
+            ddl-auto: update
