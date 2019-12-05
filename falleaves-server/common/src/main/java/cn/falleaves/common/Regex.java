@@ -1,4 +1,4 @@
-package cn.falleaves.auth.utils;
+package cn.falleaves.common;
 
 public enum Regex {
 

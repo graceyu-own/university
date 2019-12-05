@@ -7,7 +7,7 @@ import cn.falleaves.auth.model.dto.UserRegisterDTO;
 import cn.falleaves.auth.repository.UserInfoRepository;
 import cn.falleaves.auth.repository.UserLoginRepository;
 import cn.falleaves.auth.service.IAuthService;
-import cn.falleaves.auth.utils.IdentifierType;
+import cn.falleaves.common.IdentifierType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
