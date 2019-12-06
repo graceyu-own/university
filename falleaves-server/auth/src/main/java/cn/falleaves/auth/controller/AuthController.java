@@ -4,10 +4,12 @@ import cn.falleaves.auth.model.dto.UserLoginDTO;
 import cn.falleaves.auth.model.vo.UserLoginVO;
 import cn.falleaves.auth.model.vo.UserRegisterVO;
 import cn.falleaves.auth.service.impl.AuthService;
-import cn.falleaves.auth.utils.ResponseData;
+import cn.falleaves.common.ResponseData;
+import cn.falleaves.common.ReturnValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -17,25 +19,25 @@ public class AuthController {
     private AuthService authService;
 
     @RequestMapping("/login")
-    public ResponseData login(UserLoginVO userLoginVO) {
-
-        ResponseData rd = new ResponseData();
+    public ResponseData<? extends String> login(UserLoginVO userLoginVO) {
 
         if(null == userLoginVO.getIdentifier() || userLoginVO.getIdentifier().equals("")) {
-            rd.setAll(401, 1, "Identifier cannot be null");
-        } else
+            return ResponseData.New(ReturnValue.IDENTIFIER_EMPTY);
+        }
 
         if(null == userLoginVO.getCredential() || userLoginVO.getCredential().equals("")) {
-            rd.setAll(401, 2, "Credential cannot be null");
+            return ResponseData.New(ReturnValue.CREDENTIAL_EMPTY);
         }
 
-        if(!authService.login(new UserLoginDTO(userLoginVO.getIdentifier(), userLoginVO.getCredential()))) {
-            rd.setAll(401, 3, "Incorrect credentials");
+        try{
+            boolean result = authService.login(new UserLoginDTO(userLoginVO.getIdentifier(), userLoginVO.getCredential()));
+            if(!result) {
+                return ResponseData.New(ReturnValue.INCORRECT_CREDENTIALS);
+            }
+            return ResponseData.New(ReturnValue.SUCCESS);
+        } catch (Exception e) {
+            return ResponseData.New(ReturnValue.INTERNET_SERVER_ERROR);
         }
-
-        rd.setAll(400, 0, "Login success");
-
-        return rd;
     }
 
     @RequestMapping("/register")
@@ -43,6 +45,11 @@ public class AuthController {
 
         ResponseData rd = new ResponseData();
 
+        if(null == userRegisterVO.getNickname() || userRegisterVO.getNickname().equals("")) {
+            return ResponseData.New(401.10, "Nickname is empty");
+        }
+
+        
         return rd;
     }
 
@@ -50,6 +57,8 @@ public class AuthController {
     public ResponseData logout() {
 
         ResponseData rd = new ResponseData();
+
+
 
         return rd;
     }

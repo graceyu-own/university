@@ -25,15 +25,23 @@ public class AuthService implements IAuthService {
     private UserInfoRepository userInfoRepository;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, timeout = 3000)
     public boolean login(UserLoginDTO userLoginDTO) {
 
-        UserLogin userLogin = new UserLogin()
-                .setIdentifier(userLoginDTO.getIdentifier())
-                .setCredential(userLoginDTO.getCredential());
+        boolean found = false;
 
-        Optional<UserLogin> one = userLoginRepository.findOne(Example.of(userLogin));
-        return one.isPresent();
+        try {
+            UserLogin userLogin = new UserLogin()
+                    .setIdentifier(userLoginDTO.getIdentifier())
+                    .setCredential(userLoginDTO.getCredential());
+
+            Optional<UserLogin> one = userLoginRepository.findOne(Example.of(userLogin));
+            found = one.isPresent();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return found;
     }
 
     @Override

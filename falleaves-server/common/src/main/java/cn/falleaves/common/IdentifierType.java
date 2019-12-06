@@ -1,5 +1,11 @@
 package cn.falleaves.common;
 
+/**
+ * 登录标识符可用类型
+ *
+ * @author graceyu
+ * @since 1.8
+ */
 public enum IdentifierType {
 
     NICKNAME(1),

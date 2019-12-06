@@ -1,46 +1,48 @@
 package cn.falleaves.common;
 
-public class ResponseData {
+/**
+ * 响应数据类(用作与向前端返回数据)
+ *
+ * @author graceyu
+ * @since 1.8
+ */
+public class ResponseData<T> {
 
-    private int httpCodePrefix = 0;
-    private int httpCodeSuffix = 0;
-    private String message = "";
+    private double code = 0;
+    private T data = null;
 
-    public int getHttpCodePrefix() {
-        return httpCodePrefix;
+    public ResponseData() {
     }
 
-    public ResponseData setHttpCodePrefix(int httpCodePrefix) {
-        this.httpCodePrefix = httpCodePrefix;
+    public ResponseData(double code, T data) {
+        this.code = code;
+        this.data = data;
+    }
+
+    public double getCode() {
+        return code;
+    }
+
+    public ResponseData setCode(double code) {
+        this.code = code;
         return this;
     }
 
-    public int getHttpCodeSuffix() {
-        return httpCodeSuffix;
+    public T getData() {
+        return data;
     }
 
-    public ResponseData setHttpCodeSuffix(int httpCodeSuffix) {
-        this.httpCodeSuffix = httpCodeSuffix;
+    public ResponseData setData(T data) {
+        this.data = data;
         return this;
     }
 
-    public String getMessage() {
-        return message;
+    public static <T> ResponseData<T> New(ReturnValue rv) {
+        if(null == rv.getData()) return new ResponseData<>().setCode(rv.getCode());
+        return new ResponseData<T>(rv.getCode(), (T)rv.getData());
     }
 
-    public ResponseData setMessage(String message) {
-        this.message = message;
-        return this;
+    public static <T> ResponseData<T> New(double code, T data) {
+        return new ResponseData<>(code, data);
     }
-
-    public void setAll(int httpCodePrefix, int httpCodeSuffix, String message) {
-        this.httpCodePrefix = httpCodePrefix;
-        this.httpCodeSuffix = httpCodeSuffix;
-        this.message = message;
-    }
-
-    public static ResponseData notFound() {
-        return new ResponseData().setHttpCodePrefix(404).setMessage("Not found");
-    }
-
 }

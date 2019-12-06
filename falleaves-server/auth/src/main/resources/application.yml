@@ -1,12 +1,12 @@
 server:
     port: 8110
 
-eureka:
-    instance:
-        hostname: localhost
-    client:
-        service-url:
-            defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+#eureka:
+#    instance:
+#        hostname: localhost
+#    client:
+#        service-url:
+#            defaultZone: http://${eureka.instance.hostname}:8090/eureka/
             
 spring:
     application:
@@ -16,8 +16,19 @@ spring:
         username: falleaves
         password: 123456
         driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.zaxxer.hikari.HikariDataSource
+        hikari:
+            auto-commit: true
+            minimum-idle: 2
+            idle-timeout: 60000
+            connection-timeout: 10000
+            max-lifetime: 1800000
+            pool-name: AuthHikariCP
+            maximum-pool-size: 5
     jpa:
         database: mysql
         show-sql: true
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         hibernate:
             ddl-auto: update
+        

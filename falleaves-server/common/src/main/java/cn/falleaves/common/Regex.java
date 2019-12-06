@@ -1,5 +1,11 @@
 package cn.falleaves.common;
 
+/**
+ * 正则匹配(用作与前端用户输入信息匹配)
+ *
+ * @author graceyu
+ * @since 1.8
+ */
 public enum Regex {
 
     NICKNAME("^[0-9a-zA-Z]{5, 30}$"),

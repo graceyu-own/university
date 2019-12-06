@@ -1,5 +1,11 @@
 package cn.falleaves.common;
 
+/**
+ * Utils
+ *
+ * @author graceyu
+ * @since 1.8
+ */
 public class Utils {
 
     public static IdentifierType checkIdentifierType(String identifier) {
