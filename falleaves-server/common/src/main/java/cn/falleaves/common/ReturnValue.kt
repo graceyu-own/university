@@ -1,6 +1,6 @@
-package cn.falleaves.common;
+package cn.falleaves.common
 
-public enum ReturnValue {
+enum class ReturnValue(var code: Double, var data: Any) {
 
     SUCCESS(200.0, "Success"),
     INTERNET_SERVER_ERROR(500.0, "Internet server error"),
@@ -14,23 +14,4 @@ public enum ReturnValue {
 
     INCORRECT_CREDENTIALS(401.10, "Incorrect credentials"),
     TWOPASSWORD_NOTMATCH(401.11, "The two password do not match")
-
-    ;
-
-
-    private double code;
-    private Object data;
-
-    ReturnValue(double code, Object data) {
-        this.code = code;
-        this.data = data;
-    }
-
-    public double getCode() {
-        return code;
-    }
-
-    public Object getData() {
-        return data;
-    }
 }
