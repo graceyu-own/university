@@ -17,6 +17,7 @@ class AuthController {
     @Autowired
     private var authService: AuthService? = null
 
+
     @RequestMapping("/login")
     fun login(userLoginVO: UserLoginVO): ResponseData<String> {
 
