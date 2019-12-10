@@ -18,3 +18,17 @@
 .vscode
 .vscode/
 .vscode/*
+
+# java
+target
+target/
+target/*
+
+# golang
+go.mod
+*/go.mod
+go.sum
+*/go.sum
+
+# other
+._*
