@@ -1,7 +1,7 @@
 <h2 align="center">FALLEAVES</h2>
+
 > <p style="font-size: 18px;">各个服务的端口</p>
->
-> > - 注册中心(Eureka)
+>> - 注册中心(Eureka)
 > >
 > > ```
 > > 端口范围 8100 ~ 8199
@@ -46,8 +46,7 @@
 > > > 
 
 > <p style="font-size: 18px;">服务的API请求规则</p>
->
-> > 不需要的前缀
+>> 不需要的前缀
 > >
 > > ```java
 > > ~~@RequestMapping("/auth")~~
