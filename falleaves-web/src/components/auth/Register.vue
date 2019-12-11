@@ -118,6 +118,7 @@
         position: absolute; top: 0; left: 0;
         z-index: 11;
         background-image: linear-gradient( 135deg, #43CBFF 10%, #9708CC 100%);
+        overflow: hidden;
 
         & > .register-inner {
             width: 100%;
