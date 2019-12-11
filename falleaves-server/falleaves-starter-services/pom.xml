@@ -19,6 +19,7 @@
     <modules>
         <module>falleaves-starter-services-eureka</module>
         <module>falleaves-starter-services-auth</module>
+        <module>falleaves-starter-services-router</module>
     </modules>
 
     <dependencies>

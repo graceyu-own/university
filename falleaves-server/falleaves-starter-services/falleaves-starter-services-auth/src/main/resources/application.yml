@@ -1,16 +1,16 @@
 server:
-    port: 8110
+    port: 9101
       
-      #eureka:
-      #    instance:
-      #        hostname: localhost
-      #    client:
-      #        service-url:
-      #            defaultZone: http://${eureka.instance.hostname}:8090/eureka/
+eureka:
+    instance:
+        hostname: localhost
+    client:
+        service-url:
+            defaultZone: http://${eureka.instance.hostname}:8100/eureka/
 
 spring:
     application:
-        name: auth
+        name: services-auth
     
     datasource:
         url: jdbc:mysql://graceyu.top:3306/falleaves

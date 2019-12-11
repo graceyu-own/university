@@ -1,0 +1,23 @@
+server:
+    port: 8200
+
+eureka:
+    instance:
+        namespace: localhost
+    client:
+        service-url:
+            defaultZone: http://${eureka.instance.namespace}:8100/eureka/
+        
+zuul:
+    routes:
+        auth:
+            path: /auth/**
+            serviceId: services-auth
+        mail:
+            path: /mail/**
+            serviceId: services-mail
+
+spring:
+    application:
+        name: services-router
+

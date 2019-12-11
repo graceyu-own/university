@@ -17,7 +17,6 @@ import org.techas.falleaves.utils.ResponseData;
 import org.techas.falleaves.utils.ReturnValue;
 
 @RestController
-@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
