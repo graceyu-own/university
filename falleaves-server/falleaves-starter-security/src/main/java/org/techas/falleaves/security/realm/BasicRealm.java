@@ -1,6 +1,5 @@
 package org.techas.falleaves.security.realm;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -13,7 +12,6 @@ import org.techas.falleaves.model.UserEntity;
 import org.techas.falleaves.model.UserLoginEntity;
 import org.techas.falleaves.utils.UserStatusType;
 
-import javax.security.auth.login.AccountLockedException;
 import java.util.Optional;
 
 public class BasicRealm extends AuthorizingRealm {

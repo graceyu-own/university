@@ -31,11 +31,7 @@ public class ResponseData<T>{
         return this;
     }
 
-    public static <T> ResponseData<T> New(ReturnValue rv) {
-        return new ResponseData().setCode(rv.getCode()).setData(rv.getData());
-    }
-
-    public static <T> ResponseData<T> New(double code, T data) {
-        return new ResponseData().setCode(code).setData(data);
+    public static <T> ResponseData<T> New(ReturnValue rv, T data) {
+        return new ResponseData().setCode(rv.code).setData(data);
     }
 }
