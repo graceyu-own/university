@@ -14,7 +14,7 @@ import org.techas.falleaves.model.vo.UserLoginVO;
 import org.techas.falleaves.model.vo.UserRegisterVO;
 import org.techas.falleaves.services.auth.service.impl.AuthService;
 import org.techas.falleaves.utils.ResponseData;
-import org.techas.falleaves.utils.ReturnValue;
+import org.techas.falleaves.utils.HttpCode;
 
 @RestController
 public class AuthController {
@@ -26,38 +26,40 @@ public class AuthController {
     public ResponseData<String> login(UserLoginVO userLoginVO){
 
         if (null == userLoginVO.getIdentifier() || userLoginVO.getIdentifier().equals("")) {
-            return ResponseData.New(ReturnValue.IDENTIFIER_EMPTY, null);
+            return ResponseData.New(HttpCode.IDENTIFIER_EMPTY, null);
         }
 
         if (null == userLoginVO.getCredential() || userLoginVO.getCredential().equals("")) {
-            return ResponseData.New(ReturnValue.CREDENTIAL_EMPTY, null);
+            return ResponseData.New(HttpCode.CREDENTIAL_EMPTY, null);
         }
 
         Subject subject = SecurityUtils.getSubject();
 
         try {
             subject.login(new UsernamePasswordToken(userLoginVO.getIdentifier(), userLoginVO.getCredential()));
-            return ResponseData.New(ReturnValue.SUCCESS, null);
+            return ResponseData.New(HttpCode.SUCCESS, null);
 
         } catch (UnknownAccountException ignore) {
-            return ResponseData.New(ReturnValue.ACCOUNT_NOT_EXISTS, null);
+            return ResponseData.New(HttpCode.ACCOUNT_NOT_EXISTS, null);
         } catch (IncorrectCredentialsException ignore) {
-            return ResponseData.New(ReturnValue.INCORRECT_CREDENTIALS, null);
+            return ResponseData.New(HttpCode.INCORRECT_CREDENTIALS, null);
         } catch (LockedAccountException ignore) {
-            return ResponseData.New(ReturnValue.ACCOUNT_LOCKED, null);
+            return ResponseData.New(HttpCode.ACCOUNT_LOCKED, null);
         } catch (Exception ignore) {
-            return ResponseData.New(ReturnValue.INTERNET_SERVER_ERROR, null);
+            return ResponseData.New(HttpCode.INTERNET_SERVER_ERROR, null);
         }
+
+        //return ResponseData.New(ReturnValue.SUCCESS, null);
     }
 
     @RequestMapping("/register")
     public ResponseData<String> register(UserRegisterVO userRegisterVO) {
-        return ResponseData.New(ReturnValue.SUCCESS, null);
+        return ResponseData.New(HttpCode.SUCCESS, null);
     }
 
     @RequestMapping("/logout")
     public ResponseData<String> logout() {
-        return ResponseData.New(ReturnValue.SUCCESS, null);
+        return ResponseData.New(HttpCode.SUCCESS, null);
     }
 
 }

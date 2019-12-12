@@ -2,6 +2,7 @@ package org.techas.falleaves.model;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user", schema = "falleaves", catalog = "")
@@ -29,5 +30,6 @@ public class UserEntity {
         this.status = status;
         return this;
     }
+
 }
 

@@ -2,6 +2,7 @@ package org.techas.falleaves.security.realm;
 
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class BasicRealm extends AuthorizingRealm {
     public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
 
         String identifier = (String) token.getPrincipal();
-        String credential = (String) token.getCredentials();
+        String credential = new String((char[]) token.getCredentials());;
 
         Optional<UserLoginEntity> one = userLoginRepository.findOne(Example.of(new UserLoginEntity().setIdentifier(identifier).setCredential(credential)));
         UserLoginEntity userLoginEntity = one.orElse(null);
@@ -50,6 +51,10 @@ public class BasicRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+
+
+        return simpleAuthorizationInfo;
     }
 }

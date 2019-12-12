@@ -1,9 +1,10 @@
 package org.techas.falleaves.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.sql.Timestamp;
 
+@Entity
+@Table(name = "user_info", schema = "falleaves", catalog = "")
 public class UserInfoEntity {
 
     @Id
@@ -22,71 +23,71 @@ public class UserInfoEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public UserInfoEntity setId(Long id) {
         this.id = id;
+        return this;
     }
-
 
     public Long getUid() {
         return uid;
     }
 
-    public void setUid(Long uid) {
+    public UserInfoEntity setUid(Long uid) {
         this.uid = uid;
+        return this;
     }
-
 
     public String getNickname() {
         return nickname;
     }
 
-    public void setNickname(String nickname) {
+    public UserInfoEntity setNickname(String nickname) {
         this.nickname = nickname;
+        return this;
     }
-
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public UserInfoEntity setEmail(String email) {
         this.email = email;
+        return this;
     }
-
 
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public UserInfoEntity setPhone(String phone) {
         this.phone = phone;
+        return this;
     }
-
 
     public Long getAge() {
         return age;
     }
 
-    public void setAge(Long age) {
+    public UserInfoEntity setAge(Long age) {
         this.age = age;
+        return this;
     }
-
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public UserInfoEntity setLocation(String location) {
         this.location = location;
+        return this;
     }
 
-
-    public java.sql.Timestamp getBirthday() {
+    public Timestamp getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(java.sql.Timestamp birthday) {
+    public UserInfoEntity setBirthday(Timestamp birthday) {
         this.birthday = birthday;
+        return this;
     }
-
 }
