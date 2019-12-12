@@ -1,6 +1,6 @@
 # FALLEAVES 行为规范手册
 
-<img src="https://basic-images-1252577698.cos.ap-shenzhen-fsi.myqcloud.com/5.jpg" alt="s" style="zoom:33%;" />
+![](lib/images/5.jpg)
 
 
 
