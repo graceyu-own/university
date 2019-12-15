@@ -1,11 +1,9 @@
 package consumer
 
-import ()
-
 type Data struct {
-	UseMail          string
-	MailType         int
-	VerificationCode string
+	UseMail          string		//目标用户邮箱
+	MailType         int		//邮件类型
+	VerificationCode string		//验证码
 }
 
 func NewData(useMail string, mailType int, verCode string) *Data {
