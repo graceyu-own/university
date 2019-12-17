@@ -10,6 +10,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.techas.falleaves.model.vo.EmailVO;
 import org.techas.falleaves.model.vo.UserLoginVO;
 import org.techas.falleaves.model.vo.UserRegisterVO;
 import org.techas.falleaves.services.auth.service.impl.AuthService;
@@ -48,13 +49,48 @@ public class AuthController {
         } catch (Exception ignore) {
             return ResponseData.New(HttpCode.INTERNET_SERVER_ERROR, null);
         }
-
-        //return ResponseData.New(ReturnValue.SUCCESS, null);
     }
 
     @RequestMapping("/register")
     public ResponseData<String> register(UserRegisterVO userRegisterVO) {
+
+        if(null == userRegisterVO.getNickname() || userRegisterVO.getNickname().equals("")) {
+            return ResponseData.New(HttpCode.NICKNAME_EMPTY, null);
+        }
+
+        if(null == userRegisterVO.getEmail() || userRegisterVO.getEmail().equals("")) {
+            return ResponseData.New(HttpCode.EMAIL_EMPTY, null);
+        }
+
+        if(null == userRegisterVO.getPassword() || userRegisterVO.getPassword().equals("")) {
+            return ResponseData.New(HttpCode.PASSWORD_EMPTY, null);
+        }
+
+        if(null == userRegisterVO.getPassword2() || userRegisterVO.getPassword2().equals("")) {
+            return ResponseData.New(HttpCode.PASSWORD2_EMPTY, null);
+        }
+
+        if(!userRegisterVO.getPassword().equals(userRegisterVO.getPassword2())) {
+            return ResponseData.New(HttpCode.TWOPASSWORD_NOTMATCH, null);
+        }
+
+        if(null == userRegisterVO.getEmailValid() || userRegisterVO.getEmailValid().equals("")) {
+            return ResponseData.New(HttpCode.EMAILVALID_EMPTY, null);
+        }
+
+
+
         return ResponseData.New(HttpCode.SUCCESS, null);
+    }
+
+    public ResponseData<String> sendEmailValid(EmailVO emailValidVO) {
+
+        if(null == emailValidVO.getEmail() || emailValidVO.getEmail().equals("")) {
+            return ResponseData.New(HttpCode.EMAIL_EMPTY, null);
+        }
+
+        return ResponseData.New(HttpCode.SUCCESS, null);
+
     }
 
     @RequestMapping("/logout")

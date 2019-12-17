@@ -20,18 +20,13 @@
         <module>falleaves-starter-services-eureka</module>
         <module>falleaves-starter-services-auth</module>
         <module>falleaves-starter-services-router</module>
+        <module>falleaves-starter-services-actionSecurity</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.techas.falleaves</groupId>
-            <artifactId>falleaves-starter-dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -43,6 +38,12 @@
         <dependency>
             <groupId>org.techas.falleaves</groupId>
             <artifactId>falleaves-starter-security</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.techas.falleaves</groupId>
+            <artifactId>falleaves-starter-cache</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

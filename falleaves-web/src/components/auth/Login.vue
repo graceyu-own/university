@@ -12,14 +12,15 @@
                         <el-row class="content-email">
                             <el-col :span="24"><el-input v-model="auth.emailInput" placeholder="Email" clearable /></el-col>
                         </el-row>
-                        <el-row class="content-emailValid" v-show="auth.emailValidArea">
-                            <el-col :span="24"><el-input v-model="auth.emailValidInput" placeholder="Email Valid" clearable /></el-col>
-                        </el-row>
                         <el-row class="content-password">
                             <el-col :span="24"><el-input v-model="auth.passwordInput" placeholder="Password" clearable show-password /> </el-col>
                         </el-row>
                         <el-row>
-                            <el-col :span="24"><el-button type="danger" style="width: inherit;" disabled>Touch Verify</el-button></el-col>
+                            <el-col :span="24" style="position: relative">
+                                <el-button type="danger" style="width: inherit;" @click="TryActionVerify()" v-if="actionSecurityStatus === 1">Touch Verify</el-button>
+                                <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="actionSecurityStatus === 2">Touch Verify</el-button>
+                                <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="actionSecurityStatus === 3">Verify Success</el-button>
+                            </el-col>
                         </el-row>
                         <el-row class="content-option">
                             <el-col :span="12"><el-link :underline="false" type="primary" @click="ToRegister()" >Register</el-link></el-col>
@@ -36,28 +37,53 @@
 </template>
 
 <script>
+
     export default {
         name: "Login",
-
         data(){
             return {
 
                 show: false,
                 load: false,
 
+                actionSecurityStatus: 1,
+
                 auth: {
-                    emailInput      : "",
-                    passwordInput   : "",
-                    globalValid     : []
+                    emailInput          : "",
+                    passwordInput       : "",
+                    actionSecurity      : []
                 },
             }
         },
 
         methods: {
 
+            TryActionVerify: function() {
+
+                // 模拟行为验证操作
+                this.actionSecurityStatus = 2;
+
+                /*setTimeout(() => {
+                    this.actionSecurityStatus = 3;
+                }, 1666);*/
+
+                this.request.actionSecurity(r => {
+                    console.log(r);
+                    this.actionSecurityStatus = 3;
+                }, () => {
+                    this.actionSecurityStatus = 1;
+                })
+
+
+            },
+
             TryLogin: function() {
 
                 this.load = true;
+
+                this.request.authLogin(this.auth.emailInput, this.auth.passwordInput, r => {
+                    console.log(r);
+                });
 
                 let _this = this;
                 setTimeout(() => {

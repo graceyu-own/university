@@ -4,6 +4,7 @@ public class UserRegisterVO {
 
     private String nickname;
     private String email;
+    private String emailValid;
     private String password;
     private String password2;
 
@@ -22,6 +23,15 @@ public class UserRegisterVO {
 
     public UserRegisterVO setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public String getEmailValid() {
+        return emailValid;
+    }
+
+    public UserRegisterVO setEmailValid(String emailValid) {
+        this.emailValid = emailValid;
         return this;
     }
 

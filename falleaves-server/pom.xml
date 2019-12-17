@@ -14,6 +14,7 @@
         <module>falleaves-starter-utils</module>
         <module>falleaves-starter-security</module>
         <module>falleaves-starter-services</module>
+        <module>falleaves-starter-cache</module>
     </modules>
 
     <name>falleaves-starter</name>

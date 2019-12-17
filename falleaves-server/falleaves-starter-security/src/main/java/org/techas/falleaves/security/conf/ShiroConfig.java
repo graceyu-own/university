@@ -42,7 +42,6 @@ class ShiroConfig {
         return defaultAdvisorAutoProxyCreator;
     }
 
-
     @Bean
     public ShiroFilterFactoryBean shiroFilter() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
