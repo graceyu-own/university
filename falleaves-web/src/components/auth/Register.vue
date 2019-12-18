@@ -10,27 +10,29 @@
                     </section>
                     <section class="content-body">
                         <el-row class="content-nickname">
-                            <el-col :span="24"><el-input v-model="auth.nicknameInput" placeholder="Nickname" clearable /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.nicknameInput" placeholder="Nickname" clearable /> </el-col>
                         </el-row>
                         <el-row class="content-email">
-                            <el-col :span="24"><el-input v-model="auth.emailInput" placeholder="Email" clearable>
-                                <el-button slot="append" type="primary" :loading="emailBtnLoading" @click="TrySendMail()">{{emailBtnText}}</el-button>
-                            </el-input></el-col>
+                            <el-col :span="24">
+                                <el-input v-model="form.emailInput" placeholder="Email" clearable>
+                                    <el-button slot="append" type="primary" :loading="emailBtnLoading" @click="TrySendRegisterMail()">{{emailBtnText}}</el-button>
+                                </el-input>
+                            </el-col>
                         </el-row>
-                        <el-row class="content-emailValid" v-show="emailValidArea">
-                            <el-col :span="24"><el-input v-model="auth.emailValidInput" placeholder="Email Valid" clearable /></el-col>
+                        <el-row class="content-emailValid">
+                            <el-col :span="24"><el-input v-model="form.emailValidInput" placeholder="Email Valid" clearable /></el-col>
                         </el-row>
                         <el-row class="content-password">
-                            <el-col :span="24"><el-input v-model="auth.passwordInput" placeholder="Password" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="Password" clearable show-password /> </el-col>
                         </el-row>
                         <el-row class="content-password2">
-                            <el-col :span="24"><el-input v-model="auth.passwordInput2" placeholder="Confirm Password" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput2" placeholder="Confirm Password" clearable show-password /> </el-col>
                         </el-row>
-                        <el-row>
+                        <!--<el-row>
                             <el-col :span="24"><el-button type="danger" style="width: inherit;" disabled>Touch Verify</el-button></el-col>
-                        </el-row>
+                        </el-row>-->
                         <el-row class="content-option">
-                            <el-col :span="12"><el-link :underline="false" type="primary" @click="ToLogin()">Login</el-link></el-col>
+                            <el-col :span="12"><el-link :underline="false" type="primary" @click="$router.replace('/auth/login')">Login</el-link></el-col>
                             <el-col :span="12" style="text-align: right;"><el-link :underline="false" type="primary">Forget password</el-link></el-col>
                         </el-row>
                         <el-row class="content-buttons">
@@ -55,15 +57,15 @@
 
                 emailBtnText    : "Send",
                 emailBtnLoading : false,
-                emailValidArea  : false,
+                emailBtnDisabled: false,
+                emailBtnCountdown : 10,
 
-                auth: {
+                form: {
                     nicknameInput   : "",
                     emailInput      : "",
                     emailValidInput : "",
                     passwordInput   : "",
                     passwordInput2  : "",
-                    globalValid     : []
                 },
             }
         },
@@ -74,37 +76,109 @@
 
                 this.load = true;
 
-                let _this = this;
-                setTimeout(() => {
-                    _this.load = false;
+                this.request.AuthRegister(
+                    this.form.nicknameInput,
+                    this.form.emailInput,
+                    this.form.emailValidInput,
+                    this.form.passwordInput,
+                    this.form.passwordInput2,
+                    r => {
 
-                    _this.$notify.error({
-                        message: 'Incorrect credentials',
-                        duration: 2000
-                    })
+                        if(r.codeType !== 200) {
+                            this.$notify.error({
+                                message: r.data,
+                                duration: 2000
+                            })
+                        } else {
+                            this.$notify.success({
+                                message: r.data,
+                                duration: 2000
+                            })
+                        }
 
-                }, 1500);
+                    },
+
+                    error => {
+                        this.$notify.error({
+                            message: error,
+                            duration: 2000
+                        })
+                    },
+
+                    () => {
+                        this.load = false;
+                    }
+                )
+
             },
 
             // try send mail if not within the cooling time
-            TrySendMail: function() {
+            TrySendRegisterMail: function() {
 
-                this.emailBtnLoading = true;
-                this.emailBtnText = "";
+                this.SetEmailValidButtonStatus(1);
 
+                this.request.SendRegisterMail(
+                    this.form.emailInput,
+
+                    r => {
+
+                        // failed
+                        if(r.codeType !== 200) {
+                            this.SetEmailValidButtonStatus(0);
+                            this.$notify.error({
+                                message: r.data,
+                                duration: 2000
+                            })
+
+                        // success
+                        } else {
+                            this.SetEmailValidButtonStatus(2);
+                            this.$notify.success({
+                                message: r.data,
+                                duration: 2000
+                            })
+                        }
+
+                    },
+
+                    error => {
+                        this.SetEmailValidButtonStatus(0);
+                        this.$notify.error({
+                            message: error,
+                            duration: 2000
+                        })
+                    }
+                )
             },
 
-            ToLogin: function() {
-                this.$router.replace("/auth/login");
-            },
+            SetEmailValidButtonStatus(status) {
 
-            Show: function() {
-                this.show = true;
+                switch (status) {
+                    case 0:
+                        this.emailBtnText = "Send";
+                        this.emailBtnLoading = false;
+                        this.emailBtnCountdown = 120;
+                        break;
+                    case 1:
+                        this.emailBtnLoading = true;
+                        break;
+                    case 2:
+                        let t = setInterval(() => {
+                            if(this.emailBtnCountdown <= 0) {
+                                clearInterval(t);
+                                this.SetEmailValidButtonStatus(0);
+                                return;
+                            }
+                            this.emailBtnText = this.emailBtnCountdown;
+                            this.emailBtnCountdown--;
+                        }, 1000);
+                }
             }
         },
 
         mounted() {
-            this.Show();
+            this.show = true;
+
         }
     }
 </script>

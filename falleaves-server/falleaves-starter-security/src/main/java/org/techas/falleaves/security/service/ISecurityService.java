@@ -1,27 +1,16 @@
 package org.techas.falleaves.security.service;
 
-import org.techas.falleaves.model.UserEntity;
-import org.techas.falleaves.model.UserInfoEntity;
-import org.techas.falleaves.model.UserLoginEntity;
-
 public interface ISecurityService {
 
-    UserEntity findUserById(Integer id);
+    boolean hasNickname(String nickname);
 
-    UserInfoEntity findUserInfoById(Integer id);
+    boolean hasEmail(String email);
 
-    UserInfoEntity findUserInfoByUid(Integer uid);
+    boolean setLastSendMailTimeBySession(String sessionId);
 
-    UserInfoEntity findUserInfoByNickname(String nickname);
+    boolean setLastSendMailTimeByEmail(String email);
 
-    UserInfoEntity findUserInfoByEmail(String email);
+    boolean isFreqMailBySession(String sessionId);
 
-    UserInfoEntity findUserInfoByPhone(String phone);
-
-    UserLoginEntity findUserLoginById(Integer id);
-
-    UserLoginEntity findUserLoginByUid(Integer uid);
-
-    UserLoginEntity findUserLoginByIdentifier(String identifier);
-
+    boolean isFreqMailByEmail(String email);
 }

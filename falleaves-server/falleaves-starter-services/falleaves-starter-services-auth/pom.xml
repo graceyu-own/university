@@ -11,11 +11,11 @@
 
     <artifactId>falleaves-starter-services-auth</artifactId>
 
-    <dependencies>
+    <!--<dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-    </dependencies>
+    </dependencies>-->
 
 </project>

@@ -10,16 +10,16 @@
                     </section>
                     <section class="content-body">
                         <el-row class="content-email">
-                            <el-col :span="24"><el-input v-model="auth.emailInput" placeholder="Email" clearable /></el-col>
+                            <el-col :span="24"><el-input v-model="form.emailInput" placeholder="Email" clearable /></el-col>
                         </el-row>
                         <el-row class="content-password">
-                            <el-col :span="24"><el-input v-model="auth.passwordInput" placeholder="Password" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="Password" clearable show-password /> </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24" style="position: relative">
-                                <el-button type="danger" style="width: inherit;" @click="TryActionVerify()" v-if="actionSecurityStatus === 1">Touch Verify</el-button>
-                                <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="actionSecurityStatus === 2">Touch Verify</el-button>
-                                <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="actionSecurityStatus === 3">Verify Success</el-button>
+                                <el-button type="danger" style="width: inherit;" @click="TryBehaviorValid()" v-if="behaviorValidStatus === 1">Touch Verify</el-button>
+                                <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">Touch Verify</el-button>
+                                <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="behaviorValidStatus === 3">Verify Success</el-button>
                             </el-col>
                         </el-row>
                         <el-row class="content-option">
@@ -45,33 +45,36 @@
 
                 show: false,
                 load: false,
+                behaviorValidStatus: 1,
+                behaviorValid: "",
 
-                actionSecurityStatus: 1,
-
-                auth: {
+                form: {
                     emailInput          : "",
                     passwordInput       : "",
-                    actionSecurity      : []
                 },
             }
         },
 
         methods: {
 
-            TryActionVerify: function() {
+            TryBehaviorValid: function() {
 
-                // 模拟行为验证操作
-                this.actionSecurityStatus = 2;
+                this.behaviorValidStatus = 2;
 
-                /*setTimeout(() => {
-                    this.actionSecurityStatus = 3;
-                }, 1666);*/
+                this.request.AuthBehavior(r => {
+                    if(r.data.data == null) {
 
-                this.request.actionSecurity(r => {
-                    console.log(r);
-                    this.actionSecurityStatus = 3;
+                        this.$notify.error({
+                            message: 'Behavior verify failed, please try again',
+                            duration: 2000
+                        });
+                        this.behaviorValidStatus = 1;
+                    } else {
+                        this.behaviorValid = r.data.data;
+                        this.behaviorValidStatus = 3;
+                    }
                 }, () => {
-                    this.actionSecurityStatus = 1;
+                    this.behaviorValidStatus = 1;
                 })
 
 
@@ -81,7 +84,7 @@
 
                 this.load = true;
 
-                this.request.authLogin(this.auth.emailInput, this.auth.passwordInput, r => {
+                this.request.AuthLogin(this.form.emailInput, this.form.passwordInput, form.behaviorValid, r => {
                     console.log(r);
                 });
 
@@ -99,15 +102,11 @@
 
             ToRegister: function() {
                 this.$router.replace("/auth/register");
-            },
-
-            Show: function() {
-                this.show = true;
-            },
+            }
         },
 
         mounted() {
-            this.Show();
+            this.show = true;
         }
     }
 </script>

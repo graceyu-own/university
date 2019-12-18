@@ -2,6 +2,7 @@ package org.techas.falleaves.services.auth.service;
 
 import org.techas.falleaves.model.UserEntity;
 import org.techas.falleaves.model.UserLoginEntity;
+import org.techas.falleaves.model.dto.EmailDTO;
 import org.techas.falleaves.model.dto.UserLoginDTO;
 import org.techas.falleaves.model.dto.UserRegisterDTO;
 import org.techas.falleaves.model.vo.EmailVO;
@@ -12,5 +13,7 @@ public interface IAuthService {
 
     UserEntity register(UserRegisterDTO userRegisterDTO);
 
-    boolean sendEmailValid(EmailVO emailVO);
+    boolean sendRegisterMail(EmailDTO emailDTO);
+
+    String getRegisterMail(EmailDTO emailDTO);
 }

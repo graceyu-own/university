@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.techas.falleaves.security.realm.BasicRealm;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Configuration
 class ShiroConfig {
@@ -25,28 +26,23 @@ class ShiroConfig {
     private String redisHost;
 
     @Value("${spring.redis.port}")
-    private int redisPort;
+    private String redisPort;
 
     @Value("${spring.redis.password}")
     private String redisPassword;
 
     @Value("${spring.redis.timeout}")
-    private int redisTimeout;
-
-    @Bean
-    public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator(){
-
-        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator=new DefaultAdvisorAutoProxyCreator();
-        defaultAdvisorAutoProxyCreator.setUsePrefix(true);
-
-        return defaultAdvisorAutoProxyCreator;
-    }
+    private String redisTimeout;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-
         shiroFilterFactoryBean.setSecurityManager(securityManager());
+
+        Map<String, String> filterMap = new LinkedHashMap<>();
+        filterMap.put("/**", "anon");
+
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilterFactoryBean;
     }
@@ -68,10 +64,10 @@ class ShiroConfig {
 
     @Bean
     public SessionManager sessionManager() {
-        DefaultSessionManager defaultSessionManager = new DefaultSessionManager();
-        defaultSessionManager.setSessionDAO(sessionDAO());
+        MySessionManager mySessionManager = new MySessionManager();
+        mySessionManager.setSessionDAO(sessionDAO());
 
-        return defaultSessionManager;
+        return mySessionManager;
     }
 
     @Bean
@@ -87,10 +83,10 @@ class ShiroConfig {
     public RedisManager redisManager(){
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(this.redisHost);
-        redisManager.setPort(this.redisPort);
+        redisManager.setPort(Integer.valueOf(this.redisPort));
         redisManager.setPassword(this.redisPassword);
         redisManager.setExpire(1800);
-        redisManager.setTimeout(this.redisTimeout);
+        redisManager.setTimeout(Integer.valueOf(this.redisTimeout));
 
         return redisManager;
     }

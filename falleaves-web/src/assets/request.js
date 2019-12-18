@@ -1,16 +1,19 @@
 import axios from 'axios'
 
-export default new Request();
-
 class Request{
 
-    _router = "http://localhost:9100";
-    _actionSecurity = this._router + "/actionSecurity";
-    _authSecurity   = this._router + "/auth";
+    constructor() {
+        axios.defaults.withCredentials = true;
+        axios.defaults.timeout = 5000;
+    }
 
-    actionSecurity(fn, errorfn = () => {}, finallyfn = () => {}) {
-        axios.get(this._actionSecurity + "/checkAction").then(r => {
-            fn(r);
+    /*_router = "http://localhost:8200";
+    _authService = this._router + "/auth";*/
+    _authService = "http://localhost:9100";
+
+    AuthBehavior (fn, errorfn = () => {}, finallyfn = () => {}) {
+        axios.get(this._authService + "/checkBehavior").then(r => {
+            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
         }).catch(error => {
             errorfn(error)
         }).finally(() => {
@@ -18,14 +21,15 @@ class Request{
         })
     }
 
-    authLogin(identifier, credential, fn, errorfn = () => {}, finallyfn = () => {}) {
+    AuthLogin (identifier, credential, behaviorValid, fn, errorfn = () => {}, finallyfn = () => {}) {
 
         let f = new FormData();
         f.append("identifier", identifier);
         f.append("credential", credential);
+        f.append("behaviorValid", behaviorValid);
 
-        axios.post(this._authSecurity + "/login", f).then(r => {
-            fn(r);
+        axios.post(this._authService + "/login", f).then(r => {
+            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
         }).catch(error => {
             errorfn(error)
         }).finally(() => {
@@ -33,5 +37,50 @@ class Request{
         })
     }
 
+    AuthRegister (nickname, email, emailValid, password, password2, fn, errorfn = () => {}, finallyfn = () => {}) {
+
+        let f = new FormData();
+        f.append("nickname", nickname);
+        f.append("email", email);
+        f.append("emailValid", emailValid);
+        f.append("password", password);
+        f.append("password2", password2);
+
+        axios.post(this._authService + "/register", f).then(r => {
+            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
+        }).catch(error => {
+            errorfn(error);
+        }).finally(() => {
+            finallyfn()
+        })
+    }
+
+
+    SendRegisterMail (email, fn, errorfn = () => {}, finallyfn = () => {}) {
+
+        let f = new FormData();
+
+        f.append("email", email);
+
+        axios.post(this._authService + "/sendRegisterMail", f).then(r => {
+            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
+        }).catch(error => {
+            errorfn(error);
+        }).finally(() => {
+            finallyfn()
+        })
+
+    }
+}
+
+class ResponseData {
+
+    constructor(codeType, codeAppend, data) {
+        this.codeType = codeType;
+        this.codeAppend = codeAppend;
+        this.data = data;
+    }
 
 }
+
+export default new Request()

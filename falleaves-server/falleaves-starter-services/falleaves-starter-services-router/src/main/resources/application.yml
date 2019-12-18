@@ -3,24 +3,17 @@ server:
 
 eureka:
     instance:
-        namespace: localhost
+        hostname: localhost
     client:
         service-url:
-            defaultZone: http://${eureka.instance.namespace}:8100/eureka/
+            defaultZone: http://${eureka.instance.hostname}:8100/eureka/
         
 zuul:
     routes:
         auth:
             path: /auth/**
             serviceId: services-auth
-        actionSecurity:
-            path: /actionSecurity/**
-            serviceId: services-actionSecurity
         mail:
             path: /mail/**
             serviceId: services-mail
-
-spring:
-    application:
-        name: services-router
 

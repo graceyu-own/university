@@ -10,10 +10,13 @@ import org.techas.falleaves.dao.UserRepository;
 import org.techas.falleaves.model.UserEntity;
 import org.techas.falleaves.model.UserInfoEntity;
 import org.techas.falleaves.model.UserLoginEntity;
+import org.techas.falleaves.model.dto.EmailDTO;
 import org.techas.falleaves.model.dto.UserLoginDTO;
 import org.techas.falleaves.model.dto.UserRegisterDTO;
 import org.techas.falleaves.model.vo.EmailVO;
 import org.techas.falleaves.services.auth.service.IAuthService;
+import org.techas.falleaves.utils.Attr;
+import org.techas.falleaves.utils.Utils;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -31,7 +34,7 @@ public class AuthService implements IAuthService {
     private UserInfoRepository userInfoRepository;
 
     @Autowired
-    private ICacheService simpleRedisCacheService;
+    private ICacheService<String, String> simpleRedisCacheService;
 
     @Override
     public UserLoginEntity login(UserLoginDTO userLoginDTO) {
@@ -70,8 +73,19 @@ public class AuthService implements IAuthService {
         return userEntity;
     }
 
+
     @Override
-    public boolean sendEmailValid(EmailVO emailVO) {
-        return false;
+    public boolean sendRegisterMail(EmailDTO emailDTO) {
+        String code = Utils.getRandomString(6).toUpperCase();
+        System.out.println("本次验证码为: " + code);
+        return simpleRedisCacheService.set(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + emailDTO.getEmail(), code, Attr.REDIS_AUTH_REGISTER_MAIL_EXPIRE);
+    }
+
+    @Override
+    public String getRegisterMail(EmailDTO emailDTO) {
+        if(simpleRedisCacheService.has(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + emailDTO.getEmail())) {
+            return simpleRedisCacheService.get(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + emailDTO.getEmail());
+        }
+        return null;
     }
 }
