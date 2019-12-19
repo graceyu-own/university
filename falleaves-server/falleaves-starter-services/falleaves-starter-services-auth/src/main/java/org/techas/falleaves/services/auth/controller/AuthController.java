@@ -39,18 +39,16 @@ public class AuthController {
     @RequestMapping("/login")
     public ResponseData<String> login(UserLoginVO userLoginVO){
 
-        System.out.println(SecurityUtils.getSubject().getSession().getId());
-
         if (null == userLoginVO.getIdentifier() || userLoginVO.getIdentifier().equals("")) {
-            return ResponseData.New(HttpCode.AUTH_LOGIN__IDENTIFIER_EMPTY, null);
+            return ResponseData.New(HttpCode.AUTH_LOGIN__IDENTIFIER_EMPTY, "Nickname cannot be empty.");
         }
 
         if (null == userLoginVO.getCredential() || userLoginVO.getCredential().equals("")) {
-            return ResponseData.New(HttpCode.AUTH_LOGIN__CREDENTIAL_EMPTY, null);
+            return ResponseData.New(HttpCode.AUTH_LOGIN__CREDENTIAL_EMPTY, "Password cannot be empty.");
         }
 
         if(null == userLoginVO.getBehaviorValid() || userLoginVO.getBehaviorValid().equals("")) {
-            return ResponseData.New(HttpCode.BEHAVIOR_VALID__FAILED, null);
+            return ResponseData.New(HttpCode.BEHAVIOR_VALID__FAILED, "Behavior verification failed.");
         }
 
         Subject subject = SecurityUtils.getSubject();
@@ -60,13 +58,13 @@ public class AuthController {
             return ResponseData.New(HttpCode.COMMON__SUCCESS, "Login success.");
 
         } catch (UnknownAccountException ignore) {
-            return ResponseData.New(HttpCode.AUTH_LOGIN__ACCOUNT_NOT_EXISTS, null);
+            return ResponseData.New(HttpCode.AUTH_LOGIN__ACCOUNT_NOT_EXISTS, "Incorrect credentials.");
         } catch (IncorrectCredentialsException ignore) {
-            return ResponseData.New(HttpCode.AUTH_LOGIN__INCORRECT_CREDENTIALS, null);
+            return ResponseData.New(HttpCode.AUTH_LOGIN__INCORRECT_CREDENTIALS, "Incorrect credentials.");
         } catch (LockedAccountException ignore) {
-            return ResponseData.New(HttpCode.AUTH_LOGIN__ACCOUNT_LOCKED, null);
+            return ResponseData.New(HttpCode.AUTH_LOGIN__ACCOUNT_LOCKED, "Account already locked.");
         } catch (Exception ignore) {
-            return ResponseData.New(HttpCode.COMMON__INTERNET_SERVER_ERROR, null);
+            return ResponseData.New(HttpCode.COMMON__INTERNET_SERVER_ERROR, "Unknown error.");
         }
     }
 
@@ -95,43 +93,43 @@ public class AuthController {
 
         // check 两次密码是否匹配
         if(!userRegisterVO.getPassword().equals(userRegisterVO.getPassword2())) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER__TWO_PASSWORD_NOTMATCH, "Two password not match");
+            return ResponseData.New(HttpCode.AUTH_REGISTER__TWO_PASSWORD_NOTMATCH, "Two password not match.");
         }
 
         // check 邮箱验证码是否为空
         if(null == userRegisterVO.getEmailValid() || userRegisterVO.getEmailValid().equals("")) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER__EMAIL_VALID_EMPTY, "Email valid code cannot be empty");
+            return ResponseData.New(HttpCode.AUTH_REGISTER__EMAIL_VALID_EMPTY, "Email valid code cannot be empty.");
         }
 
         // check 用户名是否合法
         if(!userRegisterVO.getNickname().matches(Regex.NICKNAME.getPattern())) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER__NICKNAME_REGEX_FAILED, "null");
+            return ResponseData.New(HttpCode.AUTH_REGISTER__NICKNAME_REGEX_FAILED, "Illegal nickname");
         }
 
         // check 邮箱是否合法
         if(!userRegisterVO.getEmail().matches(Regex.EMAIL.getPattern())) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER_MAIL__EMAIL_REGEX_FAILED, null);
+            return ResponseData.New(HttpCode.AUTH_REGISTER_MAIL__EMAIL_REGEX_FAILED, "Is not a valid email address.");
         }
 
         // check 密码是否合法(无需再次判断二次密码|因为验证过两次密码是否匹配)
         if(!userRegisterVO.getPassword().matches(Regex.PASSWORD.getPattern())) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER__PASSWORD_REGEX_FAILED, null);
+            return ResponseData.New(HttpCode.AUTH_REGISTER__PASSWORD_REGEX_FAILED, "Illegal password.");
         }
 
         // check 检测邮箱验证码是否正确
         String code = authService.getRegisterMail(new EmailDTO().setEmail(userRegisterVO.getEmail()));
         if(null == code || !code.equals(userRegisterVO.getEmailValid())) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER__EMAIL_VALID_FAILED, null);
+            return ResponseData.New(HttpCode.AUTH_REGISTER__EMAIL_VALID_FAILED, "Email verification code error.");
         }
 
         // check 是否存在用户名
         if(securityService.hasNickname(userRegisterVO.getNickname())) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER__NICKNAME_EXISTS, null);
+            return ResponseData.New(HttpCode.AUTH_REGISTER__NICKNAME_EXISTS, "User name already exists.");
         }
 
         // check 是否存在邮箱
         if(securityService.hasEmail(userRegisterVO.getEmail())) {
-            return ResponseData.New(HttpCode.AUTH_REGISTER__EMAIL_EXISTS, null);
+            return ResponseData.New(HttpCode.AUTH_REGISTER__EMAIL_EXISTS, "Mailbox already exists.");
         }
 
         // check 注册是否失败
@@ -140,7 +138,7 @@ public class AuthController {
             .setEmail(userRegisterVO.getEmail())
             .setPassword(userRegisterVO.getPassword())
         )) {
-            return ResponseData.New(HttpCode.COMMON__INTERNET_SERVER_ERROR, null);
+            return ResponseData.New(HttpCode.COMMON__INTERNET_SERVER_ERROR, "Unknown error.");
         }
 
         // check -> ALL OK
@@ -182,10 +180,4 @@ public class AuthController {
         return ResponseData.New(HttpCode.COMMON__SUCCESS, "An email to send to your mailbox.");
 
     }
-
-    @RequestMapping("/logout")
-    public ResponseData<String> logout() {
-        return ResponseData.New(HttpCode.COMMON__SUCCESS, null);
-    }
-
 }

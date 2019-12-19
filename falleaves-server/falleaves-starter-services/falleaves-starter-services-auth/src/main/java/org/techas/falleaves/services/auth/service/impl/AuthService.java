@@ -16,6 +16,7 @@ import org.techas.falleaves.model.dto.UserRegisterDTO;
 import org.techas.falleaves.model.vo.EmailVO;
 import org.techas.falleaves.services.auth.service.IAuthService;
 import org.techas.falleaves.utils.Attr;
+import org.techas.falleaves.utils.UserStatusType;
 import org.techas.falleaves.utils.Utils;
 
 import javax.annotation.Resource;
@@ -50,7 +51,7 @@ public class AuthService implements IAuthService {
     @Transactional
     public UserEntity register(UserRegisterDTO userRegisterDTO) {
 
-        UserEntity userEntity = userRepository.save(new UserEntity());
+        UserEntity userEntity = userRepository.save(new UserEntity().setStatus(UserStatusType.NORMAL.getStatusType()));
 
         userLoginRepository.save(
                 new UserLoginEntity()

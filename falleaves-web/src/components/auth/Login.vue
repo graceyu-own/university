@@ -10,7 +10,7 @@
                     </section>
                     <section class="content-body">
                         <el-row class="content-email">
-                            <el-col :span="24"><el-input v-model="form.emailInput" placeholder="Email" clearable /></el-col>
+                            <el-col :span="24"><el-input v-model="form.identifierInput" placeholder="Nickname" clearable /></el-col>
                         </el-row>
                         <el-row class="content-password">
                             <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="Password" clearable show-password /> </el-col>
@@ -46,11 +46,11 @@
                 show: false,
                 load: false,
                 behaviorValidStatus: 1,
-                behaviorValid: "",
 
                 form: {
-                    emailInput          : "",
+                    identifierInput     : "",
                     passwordInput       : "",
+                    behaviorValid       : "",
                 },
             }
         },
@@ -61,43 +61,61 @@
 
                 this.behaviorValidStatus = 2;
 
-                this.request.AuthBehavior(r => {
-                    if(r.data.data == null) {
+                this.request.AuthBehavior(
+                    r => {
 
-                        this.$notify.error({
-                            message: 'Behavior verify failed, please try again',
-                            duration: 2000
-                        });
+                        if(r.codeType !== 200) {
+
+                            this.$notify.error({
+                                message: 'Behavior verify failed, please try again',
+                                duration: 2000
+                            });
+                            this.behaviorValidStatus = 1;
+                        } else {
+                            this.form.behaviorValid = r.data;
+                            this.behaviorValidStatus = 3;
+                        }
+                    },
+
+                    () => {
                         this.behaviorValidStatus = 1;
-                    } else {
-                        this.behaviorValid = r.data.data;
-                        this.behaviorValidStatus = 3;
                     }
-                }, () => {
-                    this.behaviorValidStatus = 1;
-                })
-
-
+                )
             },
 
             TryLogin: function() {
 
                 this.load = true;
 
-                this.request.AuthLogin(this.form.emailInput, this.form.passwordInput, form.behaviorValid, r => {
-                    console.log(r);
-                });
+                this.request.AuthLogin(
+                    this.form.identifierInput,
+                    this.form.passwordInput,
+                    this.form.behaviorValid,
+                    r => {
+                        if(r.codeType !== 200) {
+                            this.$notify.error({
+                                message: r.data,
+                                duration: 2000
+                            })
+                        } else {
+                            this.$notify.success({
+                                message: r.data,
+                                duration: 2000
+                            })
+                        }
+                    },
+                    error => {
 
-                let _this = this;
-                setTimeout(() => {
-                    _this.load = false;
+                        this.$notify.error({
+                            message: error,
+                            duration: 2000
+                        })
+                    },
 
-                    _this.$notify.error({
-                        message: 'Incorrect credentials',
-                        duration: 2000
-                    })
-
-                }, 1500);
+                    () => {
+                        this.load = false;
+                    }
+                );
             },
 
             ToRegister: function() {
@@ -113,15 +131,12 @@
 
 <style scoped lang="less">
 
-
-
     #login {
 
         width: 100%;
         height: 100%;
         position: absolute; top: 0; left: 0;
         z-index: 11;
-        background-image: linear-gradient( 135deg, #43CBFF 10%, #9708CC 100%);
         overflow: hidden;
 
         & > .login-inner {
@@ -132,8 +147,9 @@
             & > .inner-content {
                 width: 100%;
                 max-width: 600px;
+                height: 100%;
                 background-color: rgba(255, 255, 255, 1);
-                border-radius: 50px 50px 0 0;
+                border-radius: 10px 10px 0 0;
                 padding: 50px 25px;
                 margin: auto;
                 box-shadow: 2px 0 10px rgba(47, 47, 47, 0.8);

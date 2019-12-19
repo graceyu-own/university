@@ -20,7 +20,7 @@ public class BehaviorController {
             return ResponseData.New(HttpCode.BEHAVIOR_VALID__COMMON_FAILED, null);
         }
 
-        return ResponseData.New(HttpCode.COMMON__SUCCESS, "666");
+        return ResponseData.New(HttpCode.COMMON__SUCCESS, "success");
     }
 
 }

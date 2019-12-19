@@ -1,9 +1,18 @@
-input::-webkit-input-placeholder {font-family: 'Exo 2', sans-serif;}
+input{
+    user-select: text;
+    -webkit-user-select: text;
+    caret-color:#268af1;
+    line-height: inherit !important;
+}
+input::-webkit-input-placeholder {
+    font-family: 'Ubuntu', sans-serif;
+}
 :root{font-size: 10px;}
-*{box-sizing: border-box;margin: 0; padding: 0; font-family: 'Exo 2', sans-serif !important;}
+*{box-sizing: border-box;margin: 0; padding: 0; font-family: 'Ubuntu', sans-serif !important;}
 html, body{height: 100%;}
 
-.icon {width: 1em; height: 1em;vertical-align: -0.15em;fill: currentColor;overflow: hidden;}
+
+.icon {width: 1em; height: 1em; vertical-align: -0.15em;fill: currentColor;overflow: hidden;}
 .el-notification {padding: 10px !important; }
 .el-notification__content {margin-top: 2px !important; font-size: 1.4rem !important;}
 .el-notification__closeBtn {top: 14px !important;}

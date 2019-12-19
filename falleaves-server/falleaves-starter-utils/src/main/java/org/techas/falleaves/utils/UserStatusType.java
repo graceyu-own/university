@@ -4,6 +4,7 @@ public enum UserStatusType {
 
     NORMAL(1),
     LOCKED(2),
+    DISABLED(3)
 
     ;
 

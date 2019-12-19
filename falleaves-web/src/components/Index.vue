@@ -1,13 +1,5 @@
-<!--
-    @author : Graceyu
-    @date   : 2019/12/1
-    @status : develop
-
-    @description:
-        -> null.
--->
 <template>
-    <section id="index">
+    <section id="index" ref="index">
         <div class="index-background">
             <div class="background-before"></div>
             <div class="background-after" ref="backgroundAfter"></div>
@@ -36,11 +28,10 @@
     export default {
         name: "Index",
 
-        components: {
-        },
 
         data() {
             return {
+
                 contentButtonsDisplay: false,
                 loginDisplay: false
             }
@@ -69,7 +60,7 @@
                         _this.$refs.backgroundAfter.style.opacity = "1";
                         _this.$refs.loading.remove();
                         _this.contentButtonsDisplay = true;
-                    }, 1500)
+                    }, 0)
                 }
             }
         },
@@ -88,23 +79,27 @@
         height: 100%;
         position: relative;
 
+        transition: width 666ms, height 666ms, margin-top 666ms, margin-left 666ms;
+
         & > .index-background {
-            width: inherit;
-            height: inherit;
+
+            width: 100%;
+            height: 100%;
             position: absolute; top: 0; left: 0;
+
             z-index: 6;
 
             & > .background-before {
-                width: inherit;
-                height: inherit;
+                width: 100%;
+                height: 100%;
                 position: absolute; top: 0; left: 0;
                 background-color: rgba(0, 0, 0, 1);
                 z-index: 7;
             }
 
             & > .background-after {
-                width: inherit;
-                height: inherit;
+                width: 100%;
+                height: 100%;
                 position: absolute; top: 0; left: 0;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -117,8 +112,8 @@
         }
 
         & > .index-mask {
-            width: inherit;
-            height: inherit;
+            width: 100%;
+            height: 100%;
             position: absolute; top: 0; left: 0;
             background-color: rgba(0, 0, 0, 0.4);
             z-index: 9;
@@ -132,9 +127,10 @@
         }
 
         & > .index-content {
-            width: inherit;
-            height: inherit;
+            width: 100%;
+            height: 100%;
             position: absolute; top: 0; left: 0;
+
             z-index: 11;
 
             & > .content-buttons {
