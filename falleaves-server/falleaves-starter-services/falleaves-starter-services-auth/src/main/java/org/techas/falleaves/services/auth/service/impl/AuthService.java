@@ -34,7 +34,7 @@ public class AuthService implements IAuthService {
     @Resource
     private UserInfoRepository userInfoRepository;
 
-    @Autowired
+    @Resource
     private ICacheService<String, String> simpleRedisCacheService;
 
     @Override
