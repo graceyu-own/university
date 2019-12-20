@@ -13,7 +13,7 @@ const (
 	LevelInfo
 	LevelWarning
 	LevelError
-	LevelPanic
+	LevelFatal
 )
 // 日志等级 string
 const (
@@ -21,7 +21,7 @@ const (
 	LevelInfoString    = "INFO"
 	LevelWarningString = "WARNING"
 	LevelErrorString   = "ERROR"
-	LevelPanicString   = "PANIC"
+	LevelFatalString   = "FATAL"
 )
 
 var rootLogger int
@@ -40,8 +40,8 @@ func init() {
 			rootLogger = LevelWarning
 		case LevelErrorString:
 			rootLogger = LevelError
-		case LevelPanicString:
-			rootLogger = LevelPanic
+		case LevelFatalString:
+			rootLogger = LevelFatal
 	}
 	Debug("rootLogger:", rootLogger)
 }
@@ -51,17 +51,20 @@ func Println(msg string) {
 	fmt.Printf("%s %s\n", time.Now().Format("2006-01-02 15:04:05"), msg)
 }
 
-// Panic 极端错误
-func Panic(format string, v ...interface{}) {
-	if LevelPanic > rootLogger {
+// Fatal 严重错误
+// 指出每个严重的错误事件将会导致应用程序的退出
+func Fatal(format string, v ...interface{}) {
+	if LevelFatal > rootLogger {
 		return
 	}
-	msg := fmt.Sprintf(fmt.Sprintf("[%s] %s", LevelPanicString, format), v...)
+	msg := fmt.Sprintf(fmt.Sprintf("[%s] %s", LevelFatalString, format), v...)
 	Println(msg)
 	os.Exit(0)
 }
 
 // Error 错误
+// 指出虽然发生错误事件，但仍然不影响系统的继续运行
+// 打印错误和异常信息，如果不想输出太多的日志，可以使用这个级别
 func Error(format string, v ...interface{}) {
 	if LevelError > rootLogger {
 		return
@@ -71,6 +74,7 @@ func Error(format string, v ...interface{}) {
 }
 
 // Warning 警告
+// 表明会出现潜在错误的情形，有些信息不是错误信息
 func Warning(format string, v ...interface{}) {
 	if LevelWarning > rootLogger {
 		return
@@ -80,6 +84,7 @@ func Warning(format string, v ...interface{}) {
 }
 
 // Info 信息
+// 消息在粗粒度级别上突出强调应用程序的运行过程
 func Info(format string, v ...interface{}) {
 	if LevelInfo > rootLogger {
 		return
@@ -88,7 +93,7 @@ func Info(format string, v ...interface{}) {
 	Println(msg)
 }
 
-// Debug 校验
+// Debug 调试
 func Debug(format string, v ...interface{}) {
 	if LevelDebug > rootLogger {
 		return
