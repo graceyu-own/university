@@ -1,155 +1,170 @@
-package main
+package config
 
 import (
-	"io/ioutil"
 	"fmt"
 	"log"
 	"reflect"
+	"regexp"
 	"errors"
 	"strings"
+	"strconv"
+	"io/ioutil"
 
 	yaml "gopkg.in/yaml.v2"
 )
 
 
 // 用于类型判断 map[interface{}]interface{}
-var _typeMap_    reflect.Type
+var _typeMap    reflect.Type
 // 用于类型判断
-var _typeInt_    reflect.Type
-var _typeString_ reflect.Type
-var _typeBool_   reflect.Type
-var _typeFloat_  reflect.Type
+var _typeInt    reflect.Type
+var _typeString reflect.Type
+var _typeBool   reflect.Type
+var _typeFloat  reflect.Type
 
 func init() {
 	var typeMap map[interface{}]interface{}
-	_typeMap_ = reflect.TypeOf(typeMap)
+	_typeMap = reflect.TypeOf(typeMap)
 
 	var typeInt int
-	_typeInt_ = reflect.TypeOf(typeInt)
+	_typeInt = reflect.TypeOf(typeInt)
 
 	var typeString string
-	_typeString_ = reflect.TypeOf(typeString)
+	_typeString = reflect.TypeOf(typeString)
 
 	var typeBool bool
-	_typeBool_ = reflect.TypeOf(typeBool)
+	_typeBool = reflect.TypeOf(typeBool)
 
 	var typeFloat float64
-	_typeFloat_ = reflect.TypeOf(typeFloat)
+	_typeFloat = reflect.TypeOf(typeFloat)
 }
 
+// Config 配置文件结构体
 type Config struct {
-	ymalData map[interface{}]interface{}
+	ymalData map[string]interface{}
 }
 
-// 读取 yml 配置文件
+// ReadConfig 读取 yml 配置文件
 func ReadConfig(file string) (*Config, error) {
 	config := &Config{
-		ymalData: make(map[interface{}]interface{}),
+		ymalData: make(map[string]interface{}),
 	}
 
 	yamlFile, err := ioutil.ReadFile(file)//ioutil.ReadFile("test.yaml")
 
 	if err != nil {
         return nil, err
-    }
+	}
+	
+	yDaya := make(map[interface{}]interface{})
 
-	err = yaml.Unmarshal(yamlFile, config.ymalData)
+	err = yaml.Unmarshal(yamlFile, yDaya)
     if err != nil {
         return nil, err
     }
 	//log.Println("conf", config.ymalData)
 
+	config.ymalData = getAllPath(yDaya)
+
 	return config, nil
 }
 
-// 格式化配置文件
-// 进行 节点 值 替换
-// TODO 未完成
-func (config *Config) Formatted() *Config {
-
+// Formatted 格式化配置文件
+// 进行 节点与值 的替换
+func (config *Config) Formatted() error {
+	r, _ := regexp.Compile("\\${(.*?)}")
 	for key, value := range config.ymalData {
-		//a := reflect.TypeOf(value) == reflect.TypeOf(b)
-		
-		log.Println(key, reflect.TypeOf(value) == _typeMap_)
-		if _typeMap_ == reflect.TypeOf(value){
-			
+		if _typeString == reflect.TypeOf(value) {
+			strArray := r.FindAllString(value.(string), -1)
+			var path string
+			for i := 0; i < len(strArray); i++ {
+				path = strings.Replace(strArray[i], "${", "", 1)
+				path = strings.TrimRight(path, "}")
+
+				if _, ok := config.ymalData[path]; ok {
+					data := config.ymalData[path]
+					var dataStr string
+					switch data.(type) {
+						case string:
+							dataStr = data.(string)
+							break
+						case int:
+							dataStr = strconv.Itoa(data.(int))
+							break
+						case bool:
+							dataStr = strconv.FormatBool(data.(bool))
+							break
+						case float64:
+							dataStr = strconv.FormatFloat(data.(float64), 'e', -1, 32)
+							break
+					}
+					config.ymalData[key] = strings.Replace(config.ymalData[key].(string), strArray[i], dataStr, 1)
+				} else {
+					// 不存在配置文件里定义的节点，给一个小小的⚠️
+					log.Println("xxxx")
+					return fmt.Errorf("found prth(%s) does not exist", path)
+				}
+			}
 		}
-		
 	}
 
-	return config
+	return nil
 }
 
-// 通过节点获取配置文件的数据
+// GetAllPath 获取所有的路径节点
+func (config *Config) GetAllPath() (map[string]interface{}) {
+	return config.ymalData
+}
+
+// 获取所有的路径节点
+func getAllPath(mapData map[interface{}]interface{}) (map[string]interface{}) {
+	pathMap := make(map[string]interface{})
+
+	for key, value := range mapData {
+		if _typeMap == reflect.TypeOf(value) {
+			// 只要 递不死 就往死里归
+			valueDataMap := getAllPath(value.(map[interface{}]interface{}))
+			for k, v := range valueDataMap {
+				pathMap[key.(string) + "." + k] = v
+			}
+		} else {
+			pathMap[key.(string)] = value
+		}
+	}
+
+	return pathMap
+}
+
+// GetData 通过节点获取配置文件的数据
 func (config *Config) GetData(path string) (interface{}, error) {
 	// 判断读取路径 path 是否为空
 	if "" == path {
-		return 0, errors.New(fmt.Sprintf("%s is invalid path.", path))
+		return 0, fmt.Errorf("%s is invalid path", path)
 	}
-	// 使用 "." 进行路径分割
-	pathArray := strings.Split(path, ".")
-
-	var mapData map[interface{}]interface{}
-	var data interface{}
-	var err error = nil
-
-	// 由于循环需要 mapData 有值，所以在循环外进行第一次 get 数据，使 mapData 初始化值
-	data, mapData, err = getData(config.ymalData, pathArray[0])
-	if err != nil {
-		// 此处错误为: path 中的 pathArray[0] 这个 key 不存在
-		return 0, errors.New(fmt.Sprintf("Key(%s) in path does not exist\n", pathArray[0]) + err.Error())
+	if _, ok := config.ymalData[path]; ok {
+		return config.ymalData[path], nil
 	}
-
-	for i := 1; i < len(pathArray); i++ {
-		// 递归获取 data, mapData
-		data, mapData, err = getData(mapData, pathArray[i])
-		if err != nil {
-			// 同上一个错误 pathArray[i]
-			return 0, errors.New(fmt.Sprintf("Key(%s) in path does not exist\n", pathArray[i]) + err.Error())
-		}
-	}
-
-	return data, err
+	return nil, fmt.Errorf("path(%s) does not exist", path)
 }
 
-// 获取数据 内部函数 用于 GetData 的递归
-func getData(mapData map[interface{}]interface{}, key string) (interface{}, map[interface{}]interface{}, error) {
-	if nil != mapData && _typeMap_ != reflect.TypeOf(mapData) {
-		// 此处错误为: 参数 mapData 不是有效的 map
-		return 0, nil, errors.New("Parameter mapData not is a valid map[interface{}]interface{}.")
-	}
-
-	if _, ok := mapData[key]; ok {
-	} else {
-		return 0, nil, errors.New(fmt.Sprintf("Parameter mapData does not exist key(%s)", key))
-	}
-	data := mapData[key]
-
-	// 判断获取的数据 data 是否有有效的 map
-	if _typeMap_ == reflect.TypeOf(data) {
-		return nil, data.(map[interface{}]interface{}), nil
-	}
-	return data, nil, nil
-}
-
-// 通过节点获取配置文件的数据并判断类型
+// GetDataToType 通过节点获取配置文件的数据并判断类型
 func (config *Config) GetDataToType(path string, typpData reflect.Type) (interface{}, error) {
 	data, err := config.GetData(path)
 	if err != nil {
-		return 0, errors.New(fmt.Sprintf("Path(%s) does not exist\n", path) + err.Error())
+		return 0, errors.New(fmt.Sprintf("path(%s) does not exist\n", path) + err.Error())
 	}
 
 	if typpData != reflect.TypeOf(data) {
 		// 此处错误为: 获取到的数据 data 的类型不是 typpData
-		return 0, errors.New(fmt.Sprintf("Data(%s) in path(%s) is not of type %s\n", data, path, typpData.Name()))
+		return 0, fmt.Errorf("data(%s) in path(%s) is not of type %s", data, path, typpData.Name())
 	}
 
 	return data, err
 }
 
-// 通过节点获取配置文件的 int 数据
+// GetInt 通过节点获取配置文件的 int 数据
 func (config *Config) GetInt(path string) (int, error) {
-	data, err := config.GetDataToType(path, _typeInt_)
+	data, err := config.GetDataToType(path, _typeInt)
 	if err != nil {
 		return 0, err
 	}
@@ -157,9 +172,9 @@ func (config *Config) GetInt(path string) (int, error) {
 	return data.(int), err
 }
 
-// 通过节点获取配置文件的 string 数据
+// GetString 通过节点获取配置文件的 string 数据
 func (config *Config) GetString(path string) (string, error) {
-	data, err := config.GetDataToType(path, _typeString_)
+	data, err := config.GetDataToType(path, _typeString)
 	if err != nil {
 		return "", err
 	}
@@ -167,9 +182,9 @@ func (config *Config) GetString(path string) (string, error) {
 	return data.(string), err
 }
 
-// 通过节点获取配置文件的 bool 数据
+// GetBool 通过节点获取配置文件的 bool 数据
 func (config *Config) GetBool(path string) (bool, error) {
-	data, err := config.GetDataToType(path, _typeBool_)
+	data, err := config.GetDataToType(path, _typeBool)
 	if err != nil {
 		return false, err
 	}
@@ -177,9 +192,9 @@ func (config *Config) GetBool(path string) (bool, error) {
 	return data.(bool), err
 }
 
-// 通过节点获取配置文件的 float 数据
+// GetFloat 通过节点获取配置文件的 float 数据
 func (config *Config) GetFloat(path string) (float64, error) {
-	data, err := config.GetDataToType(path, _typeFloat_)
+	data, err := config.GetDataToType(path, _typeFloat)
 	if err != nil {
 		return 0.0, err
 	}
@@ -187,13 +202,15 @@ func (config *Config) GetFloat(path string) (float64, error) {
 	return data.(float64), err
 }
 
-func main() {
-	//ReadConfig("test.yaml")
-	con, _ := ReadConfig("test.yaml")
-	//con.Formatted()
-	data, err := con.GetFloat("test.float")
-	if err != nil {
-		log.Fatal(err)
+// SetData 通过节点设置数据
+func (config *Config) SetData(path string, data interface{}) error {
+	// 判断读取路径 path 是否为空
+	if "" == path {
+		return fmt.Errorf("%s is invalid path", path)
 	}
-	log.Print(data)
+
+	// TODO: 没用判断覆盖
+
+	config.ymalData[path] = data
+	return nil
 }
