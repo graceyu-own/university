@@ -2,7 +2,6 @@ package org.techas.falleaves.security.conf;
 
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -10,11 +9,11 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.techas.falleaves.security.realm.BasicRealm;
+import org.techas.falleaves.utils.Attr;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -74,7 +73,7 @@ class ShiroConfig {
     public SessionDAO sessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
-        redisSessionDAO.setKeyPrefix("session:");
+        redisSessionDAO.setKeyPrefix(Attr.REDIS_SHIRO_SESSION_PREFIX);
 
         return redisSessionDAO;
     }
@@ -95,7 +94,7 @@ class ShiroConfig {
     public CacheManager cacheManager(){
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
-        redisCacheManager.setKeyPrefix("cache:");
+        redisCacheManager.setKeyPrefix(Attr.REDIS_SHIRO_CACHE_PREFIX);
 
         return redisCacheManager;
     }

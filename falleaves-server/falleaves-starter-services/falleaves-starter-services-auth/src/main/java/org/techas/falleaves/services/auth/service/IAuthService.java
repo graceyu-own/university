@@ -2,18 +2,24 @@ package org.techas.falleaves.services.auth.service;
 
 import org.techas.falleaves.model.UserEntity;
 import org.techas.falleaves.model.UserLoginEntity;
-import org.techas.falleaves.model.dto.EmailDTO;
-import org.techas.falleaves.model.dto.UserLoginDTO;
-import org.techas.falleaves.model.dto.UserRegisterDTO;
-import org.techas.falleaves.model.vo.EmailVO;
 
 public interface IAuthService {
 
-    UserLoginEntity login(UserLoginDTO userLoginDTO);
+    UserLoginEntity login(String identifier, String credential);
 
-    UserEntity register(UserRegisterDTO userRegisterDTO);
+    UserEntity register(String nickname, String email, String password);
 
-    boolean sendRegisterMail(EmailDTO emailDTO);
+    boolean sendRegisterMail(String email);
 
-    String getRegisterMail(EmailDTO emailDTO);
+    String getRegisterMail(String email);
+
+    void deleteRegisterMail(String email);
+
+    boolean sendResetPasswordMail(String email);
+
+    String getResetPasswordMail(String email);
+
+    void deleteResetPasswordMail(String email);
+
+    void setPassword(String email, String password);
 }

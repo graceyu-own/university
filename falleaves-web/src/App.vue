@@ -23,8 +23,5 @@
         overflow: hidden;
         background-color: black;
 
-        & /deep/ .el-notification {
-            padding: 5px !important;
-        }
     }
 </style>

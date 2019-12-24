@@ -18,6 +18,8 @@
 .vscode
 .vscode/
 .vscode/*
+*.iml
+*.iml/
 
 # java
 target

@@ -11,6 +11,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 
 Vue.prototype.request = Request;
+
 new Vue({
     render: h => h(App),
     router

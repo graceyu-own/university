@@ -10,9 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "org.techas.falleaves.dao")
 @EntityScan(basePackages = "org.techas.falleaves.model")
-@ComponentScan(basePackages = "org.techas.falleaves.security")
-@ComponentScan(basePackages = "org.techas.falleaves.services.auth.conf")
-@ComponentScan(basePackages = "org.techas.falleaves.cache.service")
+@ComponentScan(basePackages = "org.techas.falleaves")
 //@EnableDiscoveryClient
 public class AuthApplication {
 

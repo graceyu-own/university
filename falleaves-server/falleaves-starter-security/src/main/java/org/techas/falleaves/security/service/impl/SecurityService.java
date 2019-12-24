@@ -5,40 +5,57 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.techas.falleaves.cache.service.ICacheService;
 import org.techas.falleaves.dao.UserInfoRepository;
+import org.techas.falleaves.dao.UserRepository;
+import org.techas.falleaves.model.UserEntity;
 import org.techas.falleaves.model.UserInfoEntity;
 import org.techas.falleaves.security.service.ISecurityService;
 import org.techas.falleaves.utils.Attr;
 import org.techas.falleaves.utils.Utils;
 
+import javax.annotation.Resource;
+
 @Service
 public class SecurityService implements ISecurityService {
 
-    @Autowired
+    @Resource
+    private UserRepository userRepository;
+
+    @Resource
     private UserInfoRepository userInfoRepository;
 
-    @Autowired
+    @Resource
     private ICacheService<String, String> simpleRedisCacheService;
+
+
+    @Override
+    public boolean hasUserById(Long id) {
+        return userRepository.exists(Example.of(new UserEntity().setId(id)));
+    }
 
     @Override
     public boolean hasNickname(String nickname) {
 
-        return null != userInfoRepository.findOne(
+        /*return null != userInfoRepository.findOne(
             Example.of(
                 new UserInfoEntity()
                     .setNickname(nickname)
             )
-        ).orElse(null);
+        ).orElse(null);*/
+
+        return userInfoRepository.exists(Example.of(new UserInfoEntity().setNickname(nickname)));
     }
 
     @Override
     public boolean hasEmail(String email) {
 
-        return null != userInfoRepository.findOne(
+        /*return null != userInfoRepository.findOne(
             Example.of(
                 new UserInfoEntity()
                     .setEmail(email)
             )
-        ).orElse(null);
+        ).orElse(null);*/
+
+        return userInfoRepository.exists(Example.of(new UserInfoEntity().setEmail(email)));
     }
 
     @Override

@@ -1,42 +1,43 @@
 <template>
     <section id="register">
+        <back-header></back-header>
         <div class="register-inner">
             <transition name="effect-fromBottomToTop">
                 <div class="inner-content" v-loading="load" v-on:click.stop="() => {}" v-show="show">
                     <section class="content-header">
                         <el-row>
-                            <el-col><h2 style="text-align: center;">Register</h2></el-col>
+                            <el-col><p style="text-align: center; font-size: 2rem;">注册新的账号</p></el-col>
                         </el-row>
                     </section>
                     <section class="content-body">
                         <el-row class="content-nickname">
-                            <el-col :span="24"><el-input v-model="form.nicknameInput" placeholder="Nickname" clearable /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.nicknameInput" placeholder="用户名" clearable /> </el-col>
                         </el-row>
                         <el-row class="content-email">
                             <el-col :span="24">
-                                <el-input v-model="form.emailInput" placeholder="Email" clearable>
+                                <el-input v-model="form.emailInput" placeholder="邮箱" clearable>
                                     <el-button slot="append" type="primary" :loading="emailBtnLoading" @click="TrySendRegisterMail()">{{emailBtnText}}</el-button>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-row class="content-emailValid">
-                            <el-col :span="24"><el-input v-model="form.emailValidInput" placeholder="Email Valid" clearable /></el-col>
+                            <el-col :span="24"><el-input v-model="form.emailValidInput" placeholder="邮箱验证码" clearable /></el-col>
                         </el-row>
                         <el-row class="content-password">
-                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="Password" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="密码" clearable show-password /> </el-col>
                         </el-row>
                         <el-row class="content-password2">
-                            <el-col :span="24"><el-input v-model="form.passwordInput2" placeholder="Confirm Password" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput2" placeholder="再次输入密码" clearable show-password /> </el-col>
                         </el-row>
                         <!--<el-row>
                             <el-col :span="24"><el-button type="danger" style="width: inherit;" disabled>Touch Verify</el-button></el-col>
                         </el-row>-->
-                        <el-row class="content-option">
-                            <el-col :span="12"><el-link :underline="false" type="primary" @click="$router.replace('/auth/login')">Login</el-link></el-col>
-                            <el-col :span="12" style="text-align: right;"><el-link :underline="false" type="primary">Forget password</el-link></el-col>
-                        </el-row>
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryRegister()">Register</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryRegister()">注册</el-button></el-col>
+                        </el-row>
+                        <el-row class="content-action">
+                            <el-col :span="24" style="text-align: right;">
+                            </el-col>
                         </el-row>
                     </section>
                 </div>
@@ -46,16 +47,17 @@
 </template>
 
 <script>
+    import BackHeader from "@/components/common/haader/BackHeader";
     export default {
         name: "Login",
-
+        components: {BackHeader},
         data(){
             return {
 
                 show: false,
                 load: false,
 
-                emailBtnText    : "Send",
+                emailBtnText    : "发送",
                 emailBtnLoading : false,
                 emailBtnDisabled: false,
                 emailBtnCountdown : 10,
@@ -93,7 +95,8 @@
                             this.$notify.success({
                                 message: r.data,
                                 duration: 2000
-                            })
+                            });
+                            this.$router.replace("/auth/login");
                         }
 
                     },
@@ -137,7 +140,6 @@
                                 message: r.data,
                                 duration: 2000
                             });
-                            this.$router.replace("/auth/login");
                         }
 
                     },
@@ -156,7 +158,7 @@
 
                 switch (status) {
                     case 0:
-                        this.emailBtnText = "Send";
+                        this.emailBtnText = "发送";
                         this.emailBtnLoading = false;
                         this.emailBtnCountdown = 120;
                         break;
@@ -188,25 +190,22 @@
 
     #register {
 
+        display: flex;
         width: 100%;
         height: 100%;
-        position: absolute; top: 0; left: 0;
-        z-index: 11;
         overflow: hidden;
+        background-color: rgba(255, 255, 255, 0.998);
 
         & > .register-inner {
-            width: 100%;
-            position: absolute; bottom: 0; left: 0;
             display: flex;
+            width: 100%;
+            margin: auto;
 
             & > .inner-content {
                 width: 100%;
                 max-width: 600px;
-                background-color: rgba(255, 255, 255, 1);
-                border-radius: 50px 50px 0 0;
                 padding: 50px 25px;
                 margin: auto;
-                box-shadow: 2px 0 10px rgba(47, 47, 47, 0.8);
 
                 & > .content-header {
                     margin-bottom: 20px;
@@ -224,10 +223,6 @@
                     & > div:first-child {
                         margin-top: 0;
                     }
-                }
-
-                & /deep/ .el-loading-mask {
-                    border-radius: 50px 50px 0 0 !important;
                 }
             }
         }

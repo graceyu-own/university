@@ -12,10 +12,13 @@
             <transition name="effect-fromBottomToTop-opacity">
                 <div class="content-buttons" v-if="contentButtonsDisplay">
                     <el-row>
-                        <el-col :span="24"><button @click="ToLogin()">Log In</button></el-col>
+                        <el-col :span="24"><button @click="ToLogin()">登录</button></el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="24"><button @click="ToHome()">HOME</button></el-col>
+                        <el-col :span="24"><button @click="ToRegister()">注册</button></el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24"><button @click="ToHome()">主页</button></el-col>
                     </el-row>
                 </div>
             </transition>
@@ -41,6 +44,10 @@
 
             ToLogin: function() {
                 this.$router.push("/auth/login");
+            },
+
+            ToRegister: function() {
+                this.$router.push("/auth/register");
             },
 
             ToHome: function() {
@@ -115,14 +122,14 @@
             width: 100%;
             height: 100%;
             position: absolute; top: 0; left: 0;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 9;
         }
 
         & > .index-loading {
             position: absolute; top: 10px; right: 10px;
             z-index: 10;
-            font-size: 2.4rem;
+            font-size: 2.5rem;
             color: #fff;
         }
 
@@ -146,11 +153,11 @@
                     width: calc(120px + 15vw);
                     height: calc(30px + 2.5vh);
                     background-color: rgba(0, 0, 0, 0);
-                    border: 1px solid rgba(255, 255, 255, 0.7);
+                    border: 0.5px solid rgba(255, 255, 255, 0.7);
                     color: #fff;
                     outline: none;
                     cursor: pointer;
-                    border-radius: 50px;
+                    border-radius: 3px;
 
                     transition: background-color 666ms, color 666ms;
                 }
@@ -160,14 +167,6 @@
                     color: #000;
                 }
             }
-        }
-
-        & > .index-popupMarker {
-            width: inherit;
-            height: inherit;
-            position: absolute; top: 0; left: 0;
-            z-index: 12;
-            background-color: rgba(255, 255, 255, 0.6);
         }
     }
 </style>

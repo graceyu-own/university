@@ -17,4 +17,13 @@ public enum UserStatusType {
     public int getStatusType() {
         return statusType;
     }
+
+    public static boolean has(int statusType) {
+        for (UserStatusType value : UserStatusType.values()) {
+            if(value.statusType == statusType) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

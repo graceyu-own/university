@@ -1,16 +1,8 @@
-input{
-    user-select: text;
-    -webkit-user-select: text;
-    caret-color:#268af1;
-    line-height: inherit !important;
-}
-input::-webkit-input-placeholder {
-    font-family: 'Ubuntu', sans-serif;
-}
 :root{font-size: 10px;}
+input{user-select: text; -webkit-user-select: text; caret-color:#268af1; line-height: inherit !important;}
+input::-webkit-input-placeholder { font-family: 'Ubuntu', sans-serif;}
 *{box-sizing: border-box;margin: 0; padding: 0; font-family: 'Ubuntu', sans-serif !important;}
 html, body{height: 100%;}
-
 
 .icon {width: 1em; height: 1em; vertical-align: -0.15em;fill: currentColor;overflow: hidden;}
 .el-notification {padding: 10px !important; }

@@ -4,12 +4,12 @@ class Request{
 
     constructor() {
         axios.defaults.withCredentials = true;
-        axios.defaults.timeout = 5000;
+        axios.defaults.timeout = 10000;
     }
 
     /*_router = "http://localhost:8200";
     _authService = this._router + "/auth";*/
-    _authService = "http://localhost:9100";
+    _authService = "http://127.0.0.1:9100";
 
     AuthBehavior (fn, errorfn = () => {}, finallyfn = () => {}) {
         axios.get(this._authService + "/checkBehavior").then(r => {
@@ -55,6 +55,21 @@ class Request{
         })
     }
 
+    AuthResetPassword (email, fn, errorfn = () => {}, finallyfn = () => {}) {
+
+        let f = new FormData();
+
+        f.append("email", email);
+
+        axios.post(this._authService + "/resetPassword", f).then(r => {
+            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
+        }).catch(error => {
+            errorfn(error);
+        }).finally(() => {
+            finallyfn();
+        })
+
+    }
 
     SendRegisterMail (email, fn, errorfn = () => {}, finallyfn = () => {}) {
 
@@ -69,7 +84,6 @@ class Request{
         }).finally(() => {
             finallyfn()
         })
-
     }
 }
 

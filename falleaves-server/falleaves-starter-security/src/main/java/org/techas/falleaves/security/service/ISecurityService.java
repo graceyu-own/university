@@ -2,6 +2,8 @@ package org.techas.falleaves.security.service;
 
 public interface ISecurityService {
 
+    boolean hasUserById(Long id);
+
     boolean hasNickname(String nickname);
 
     boolean hasEmail(String email);
@@ -13,4 +15,6 @@ public interface ISecurityService {
     boolean isFreqMailBySession(String sessionId);
 
     boolean isFreqMailByEmail(String email);
+
+
 }

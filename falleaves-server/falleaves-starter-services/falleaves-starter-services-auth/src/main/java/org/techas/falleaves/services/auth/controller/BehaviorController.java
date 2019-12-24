@@ -1,16 +1,17 @@
 package org.techas.falleaves.services.auth.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.techas.falleaves.services.auth.service.IBehaviorService;
 import org.techas.falleaves.utils.HttpCode;
 import org.techas.falleaves.utils.ResponseData;
 
+import javax.annotation.Resource;
+
 @RestController
 public class BehaviorController {
 
-    @Autowired
+    @Resource
     private IBehaviorService behaviorAuthService;
 
     @RequestMapping("/checkBehavior")

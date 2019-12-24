@@ -13,6 +13,14 @@ public class UserEntity {
     private Long id;
     private Integer status;
 
+    public UserEntity() {
+    }
+
+    public UserEntity(Long id, Integer status) {
+        this.id = id;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }

@@ -22,11 +22,14 @@ public interface Attr {
     String REDIS_AUTH_REGISTER_MAIL_PREFIX = "auth-register-mail-valid:";
     long REDIS_AUTH_REGISTER_MAIL_EXPIRE = MillisecondCalc.MINUTE * 10;
 
+    String REDIS_AUTH_RESETPASSWORD_MAIL_PREFIX = "auth-setpassword-mail-valid:";
+    long REDIS_AUTH_RESETPASSWORD_MAIL_EXPIRE = MillisecondCalc.MINUTE * 10;
+
     /* Session最后发送邮件时间前缀 and 超时时间 : 10min */
     String REDIS_LAST_SEND_MAIL_TIME_SESSION_PREFIX = "last-send-mail-time-session:";
     long REDIS_LAST_SEND_MAIL_TIME_SESSION_EXPIRE = MillisecondCalc.MINUTE * 10;
 
-    /* Email最好发送邮件时间前缀 and 超时时间 : 10min */
+    /* Email最后发送邮件时间前缀 and 超时时间 : 10min */
     String REDIS_LAST_SEND_MAIL_TIME_EMAIL_PREFIX = "last-send-mail-time-email:";
     long REDIS_LAST_SEND_MAIL_TIME_EMAIL_EXPIRE = MillisecondCalc.MINUTE * 10;
 

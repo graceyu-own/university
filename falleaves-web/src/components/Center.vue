@@ -1,6 +1,6 @@
 <template>
     <section id="center">
-        <CommonMenu></CommonMenu>
+        <common-menu></common-menu>
     </section>
 </template>
 

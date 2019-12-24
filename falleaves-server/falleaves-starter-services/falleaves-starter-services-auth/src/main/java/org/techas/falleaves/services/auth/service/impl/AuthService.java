@@ -1,6 +1,5 @@
 package org.techas.falleaves.services.auth.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.techas.falleaves.cache.service.ICacheService;
@@ -10,12 +9,9 @@ import org.techas.falleaves.dao.UserRepository;
 import org.techas.falleaves.model.UserEntity;
 import org.techas.falleaves.model.UserInfoEntity;
 import org.techas.falleaves.model.UserLoginEntity;
-import org.techas.falleaves.model.dto.EmailDTO;
-import org.techas.falleaves.model.dto.UserLoginDTO;
-import org.techas.falleaves.model.dto.UserRegisterDTO;
-import org.techas.falleaves.model.vo.EmailVO;
 import org.techas.falleaves.services.auth.service.IAuthService;
 import org.techas.falleaves.utils.Attr;
+import org.techas.falleaves.utils.DesUtils;
 import org.techas.falleaves.utils.UserStatusType;
 import org.techas.falleaves.utils.Utils;
 
@@ -38,33 +34,31 @@ public class AuthService implements IAuthService {
     private ICacheService<String, String> simpleRedisCacheService;
 
     @Override
-    public UserLoginEntity login(UserLoginDTO userLoginDTO) {
+    public UserLoginEntity login(String identifier, String credential) {
 
         return userLoginRepository.findOne(Example.of(
-                new UserLoginEntity()
-                        .setIdentifier(userLoginDTO.getIdentifier())
-                        .setCredential(userLoginDTO.getCredential())
+                new UserLoginEntity().setIdentifier(identifier).setCredential(credential)
         )).orElse(null);
     }
 
     @Override
     @Transactional
-    public UserEntity register(UserRegisterDTO userRegisterDTO) {
+    public UserEntity register(String nickname, String email, String password) {
 
         UserEntity userEntity = userRepository.save(new UserEntity().setStatus(UserStatusType.NORMAL.getStatusType()));
 
         userLoginRepository.save(
                 new UserLoginEntity()
                     .setUid(userEntity.getId())
-                    .setIdentifier(userRegisterDTO.getNickname())
-                    .setCredential(userRegisterDTO.getPassword())
+                    .setIdentifier(nickname)
+                    .setCredential(password)
         );
 
         userInfoRepository.save(
                 new UserInfoEntity()
                     .setUid(userEntity.getId())
-                    .setNickname(userRegisterDTO.getNickname())
-                    .setEmail(userRegisterDTO.getEmail())
+                    .setNickname(nickname)
+                    .setEmail(email)
         );
 
         userRepository.flush();
@@ -76,17 +70,60 @@ public class AuthService implements IAuthService {
 
 
     @Override
-    public boolean sendRegisterMail(EmailDTO emailDTO) {
+    public boolean sendRegisterMail(String email) {
         String code = Utils.getRandomString(6).toUpperCase();
         System.out.println("本次验证码为: " + code);
-        return simpleRedisCacheService.set(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + emailDTO.getEmail(), code, Attr.REDIS_AUTH_REGISTER_MAIL_EXPIRE);
+        return simpleRedisCacheService.set(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + email, code, Attr.REDIS_AUTH_REGISTER_MAIL_EXPIRE);
     }
 
     @Override
-    public String getRegisterMail(EmailDTO emailDTO) {
-        if(simpleRedisCacheService.has(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + emailDTO.getEmail())) {
-            return simpleRedisCacheService.get(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + emailDTO.getEmail());
+    public String getRegisterMail(String email) {
+        if(simpleRedisCacheService.has(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + email)) {
+            return simpleRedisCacheService.get(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + email);
         }
         return null;
+    }
+
+    @Override
+    public void deleteRegisterMail(String email) {
+        if(simpleRedisCacheService.has(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + email)) {
+            simpleRedisCacheService.delete(Attr.REDIS_AUTH_REGISTER_MAIL_PREFIX + email);
+        }
+    }
+
+    // http://localhost:8086/#/auth/set-password?
+    // email = ?
+    // emailValid = ?
+    @Override
+    public boolean sendResetPasswordMail(String email) {
+        String code = Utils.getRandomString(32).toUpperCase();
+
+        String data = "email=" + email + "&emailValid=" + code;
+
+        simpleRedisCacheService.set(Attr.REDIS_AUTH_RESETPASSWORD_MAIL_PREFIX + email, code, Attr.REDIS_AUTH_RESETPASSWORD_MAIL_EXPIRE);
+        System.out.println("本次URL为: http://localhost:8086/#/auth/set-password?"+ DesUtils.encodeBase64(data));
+        return true;
+    }
+
+    @Override
+    public String getResetPasswordMail(String email) {
+        if(simpleRedisCacheService.has(Attr.REDIS_AUTH_RESETPASSWORD_MAIL_PREFIX + email)) {
+            return simpleRedisCacheService.get(Attr.REDIS_AUTH_RESETPASSWORD_MAIL_PREFIX  + email);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteResetPasswordMail(String email) {
+        if(simpleRedisCacheService.has(Attr.REDIS_AUTH_RESETPASSWORD_MAIL_PREFIX + email)) {
+            simpleRedisCacheService.delete(Attr.REDIS_AUTH_RESETPASSWORD_MAIL_PREFIX  + email);
+        }
+    }
+
+    @Override
+    public void setPassword(String email, String password) {
+
+
+
     }
 }
