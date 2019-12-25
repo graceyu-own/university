@@ -85,7 +85,7 @@ func NewRegisterData(app string, ipAddr string, port int) *RegisterData {
 			App:      app,
 			IPAddr:   ipAddr,
 			Port:     portData,
-			HostName: app,
+			HostName: ipAddr,
 
 			DataCenterInfo: _DataCenterInfo,
 		},
