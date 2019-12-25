@@ -1,5 +1,8 @@
 package org.techas.falleaves.services.auth.service.impl;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.techas.falleaves.cache.service.ICacheService;
@@ -34,42 +37,46 @@ public class AuthService implements IAuthService {
     private ICacheService<String, String> simpleRedisCacheService;
 
     @Override
-    public UserLoginEntity login(String identifier, String credential) {
+    public void login(String identifier, String credential) {
 
-        return userLoginRepository.findOne(Example.of(
-                new UserLoginEntity().setIdentifier(identifier).setCredential(credential)
-        )).orElse(null);
+        Subject subject = SecurityUtils.getSubject();
+        subject.login(new UsernamePasswordToken(identifier, credential));
     }
 
     @Override
     @Transactional
-    public UserEntity register(String nickname, String email, String password) {
+    public boolean register(String nickname, String email, String password) {
 
-        UserEntity userEntity = userRepository.save(new UserEntity().setStatus(UserStatusType.NORMAL.getStatusType()));
+        try {
+            UserEntity userEntity = userRepository.save(new UserEntity().setStatus(UserStatusType.NORMAL.getStatusType()));
 
-        userLoginRepository.save(
+            userLoginRepository.save(
                 new UserLoginEntity()
                     .setUid(userEntity.getId())
                     .setIdentifier(nickname)
                     .setCredential(password)
-        );
+            );
 
-        userInfoRepository.save(
+            userInfoRepository.save(
                 new UserInfoEntity()
                     .setUid(userEntity.getId())
                     .setNickname(nickname)
                     .setEmail(email)
-        );
+            );
 
-        userRepository.flush();
-        userLoginRepository.flush();
-        userInfoRepository.flush();
+            userRepository.flush();
+            userLoginRepository.flush();
+            userInfoRepository.flush();
 
-        return userEntity;
+            return true;
+        } catch (Exception ignore) {
+            return false;
+        }
     }
 
 
     @Override
+    @Transactional
     public boolean sendRegisterMail(String email) {
         String code = Utils.getRandomString(6).toUpperCase();
         System.out.println("本次验证码为: " + code);

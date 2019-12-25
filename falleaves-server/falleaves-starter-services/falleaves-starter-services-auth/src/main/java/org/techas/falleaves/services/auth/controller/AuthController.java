@@ -151,7 +151,7 @@ public class AuthController {
         }
 
         // check 注册是否失败
-        if(null == authService.register(nickname, email, password)) {
+        if(!authService.register(nickname, email, password)) {
             return ResponseData.New(HttpCode.COMMON__INTERNET_SERVER_ERROR, "Unknown error.");
         }
 

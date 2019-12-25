@@ -1,13 +1,14 @@
 package org.techas.falleaves.services.auth.service;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.techas.falleaves.model.UserEntity;
 import org.techas.falleaves.model.UserLoginEntity;
 
 public interface IAuthService {
 
-    UserLoginEntity login(String identifier, String credential);
+    void login(String identifier, String credential) throws AuthorizationException;
 
-    UserEntity register(String nickname, String email, String password);
+    boolean register(String nickname, String email, String password);
 
     boolean sendRegisterMail(String email);
 

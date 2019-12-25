@@ -15,11 +15,16 @@ public class SimpleRedisCacheService<K extends String, V> implements ICacheServi
 
     @Override
     public boolean set(K key, V value, long expireTime) {
-        if(null != key && !key.equals("") && null != value) {
-            redisTemplate.boundValueOps(key).set(value, expireTime, TimeUnit.MILLISECONDS);
-            return true;
+        try {
+            if(null != key && !key.equals("") && null != value) {
+                redisTemplate.boundValueOps(key).set(value, expireTime, TimeUnit.MILLISECONDS);
+                return true;
+            }
+            return false;
+        } catch (Exception ignore) {
+            return false;
         }
-        return false;
+
     }
 
     @Override
