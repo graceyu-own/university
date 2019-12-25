@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"regexp"
 	"errors"
@@ -12,7 +11,6 @@ import (
 
 	yaml "gopkg.in/yaml.v2"
 )
-
 
 // 用于类型判断 map[interface{}]interface{}
 var _typeMap    reflect.Type
@@ -50,12 +48,13 @@ func ReadConfig(file string) (*Config, error) {
 		ymalData: make(map[string]interface{}),
 	}
 
-	yamlFile, err := ioutil.ReadFile(file)//ioutil.ReadFile("test.yaml")
+	//yamlFile, err := ioutil.ReadFile("test.yaml")
+	yamlFile, err := ioutil.ReadFile(file)
 
 	if err != nil {
         return nil, err
 	}
-	
+
 	yDaya := make(map[interface{}]interface{})
 
 	err = yaml.Unmarshal(yamlFile, yDaya)
@@ -101,7 +100,7 @@ func (config *Config) Formatted() error {
 					config.ymalData[key] = strings.Replace(config.ymalData[key].(string), strArray[i], dataStr, 1)
 				} else {
 					// 不存在配置文件里定义的节点，给一个小小的⚠️
-					log.Println("xxxx")
+					//log.Println("xxxx")
 					return fmt.Errorf("found prth(%s) does not exist", path)
 				}
 			}
