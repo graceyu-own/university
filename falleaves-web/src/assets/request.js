@@ -1,4 +1,5 @@
 import axios from 'axios'
+import da from "element-ui/src/locale/lang/da";
 
 class Request{
 
@@ -84,6 +85,23 @@ class Request{
         }).finally(() => {
             finallyfn()
         })
+    }
+
+    AuthSetPassword (data, password, password2, fn, errorfn = () => {}, finallyfn = () => {}) {
+
+        let f = new FormData();
+        f.append("data", data);
+        f.append("password", password);
+        f.append("password2", password2);
+
+        axios.post(this._authService + "/setPassword", f).then(r => {
+            fn(new ResponseData(r.data, r.codeType, r.data.codeAppend, r.data.data));
+        }).catch(error => {
+            errorfn(error);
+        }).finally(() => {
+            finallyfn()
+        })
+
     }
 }
 

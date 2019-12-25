@@ -1,6 +1,5 @@
 package org.techas.falleaves.security.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.techas.falleaves.cache.service.ICacheService;
@@ -87,4 +86,15 @@ public class SecurityService implements ISecurityService {
 
         return false;
     }
+
+    @Override
+    public UserInfoEntity findUserByEmail(String email) {
+        return userInfoRepository.findOne(Example.of(new UserInfoEntity().setEmail(email))).orElse(null);
+    }
+
+    @Override
+    public long findUserIdByEmail(String email) {
+        return findUserByEmail(email).getId();
+    }
+
 }

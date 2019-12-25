@@ -128,9 +128,21 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public void setPassword(String email, String password) {
-
-
-
+    @Transactional
+    public boolean setPassword(Long id, String password) {
+        try {
+            userLoginRepository.findOne(Example.of(new UserLoginEntity().setId(id))).ifPresent(
+                    userLoginEntity ->
+                            userLoginRepository.save(
+                                    userLoginEntity.setCredential(password)
+                            )
+            );
+            userLoginRepository.flush();
+        } catch (Exception e) {
+            System.out.println("AuthService.setPassword出现异常:" + e);
+            return false;
+        }
+        return true;
     }
+
 }

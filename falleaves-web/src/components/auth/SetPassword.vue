@@ -17,7 +17,7 @@
                             <el-col :span="24"><el-input v-model="form.passwordInput2" placeholder="再次输入密码" clearable /></el-col>
                         </el-row>
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryLogin()">完成</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TrySetPassword()">完成</el-button></el-col>
                         </el-row>
                     </section>
                 </div>
@@ -44,6 +44,44 @@
                     passwordInput     : "",
                     passwordInput2    : "",
                 },
+            }
+        },
+
+        methods: {
+            TrySetPassword: function () {
+
+                this.load = true;
+
+                this.request.AuthSetPassword(
+                    "data",
+                    this.form.passwordInput,
+                    this.form.passwordInput2,
+                    r => {
+                        if(r.codeType !== 200){
+                            this.$notify.error({
+                                message: r.data,
+                                duration: 2000
+                            });
+                        } else {
+                            this.$notify.success({
+                                message: r.data,
+                                duration: 2000
+                            });
+                            this.$router.replace("/auth/login");
+                        }
+                    },
+
+                    error => {
+                        this.$notify.error({
+                            message: error,
+                            duration: 2000
+                        });
+                    },
+
+                    () => {
+                        this.load = false;
+                    }
+                )
             }
         },
 
