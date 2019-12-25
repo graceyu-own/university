@@ -14,26 +14,35 @@
 >>
 >>`name`为服务名(为`""`时，将自动获取`application.yml`配置文件内的内容)，`port`为服务端口
 >
->### 设置消息处理者
+>### 建立一个新的服务
 >
 >>```go
->>client.SetHandler(handler http.HandlerFunc)
+>>client.NewService(pattern, handlerService)
 >>```
 >>
->>`handler`为处理消息的函数
+>>`pattern`为路由地址例如 "/mail"，`handler`为处理消息的函数
 >
 >### 注册&注销服务
 >
 >>```go
->>client.Register()   // 注册
->>client.DoRegister() // 注销
+>>service.Register()   // 注册
+>>service.DoRegister() // 注销
 >>```
 >
 >### 运行&停止服务
 >
 >>```go
->>client.Run()  // 运行服务
->>client.Stop() // 停止服务
+>>service.Run()  // 运行服务
+>>service.Stop() // 停止服务
 >>```
 >>
 >>值得注意的是，在运行或停止服务之前，它们都将自动注册或注销服务，不过你并不需要担心是否会重复注册或注销
+>
+>### 运行&停止 所有服务
+>
+>>```go
+>>client.RunAllService()  // 运行所有服务
+>>client.StopAllService() // 停止所有服务
+>>```
+>>
+>>值得注意的是，在运行或停止所有服务之前，它们都将自动注册或注销服务，相同的，你并不需要担心重复操作的问题
