@@ -247,7 +247,27 @@ public class AuthController {
      * @return ResponseData
      */
     @RequestMapping("/setPassword")
-    public ResponseData<String> setPassword(String data) {
+    public ResponseData<String> setPassword(String data, String password, String password2) {
+
+        // check 密码是否为空
+        if("".equals(password)) {
+            return ResponseData.New(HttpCode.AUTH_REGISTER__PASSWORD_EMPTY, "Password cannot be empty");
+        }
+
+        // check 二次密码是否为空
+        if("".equals(password2)) {
+            return ResponseData.New(HttpCode.AUTH_REGISTER__PASSWORD2_EMPTY, "Two password not match.");
+        }
+
+        // check 两次密码是否匹配
+        if(!password.equals(password2)) {
+            return ResponseData.New(HttpCode.AUTH_REGISTER__TWO_PASSWORD_NOTMATCH, "Two password not match.");
+        }
+
+        // check 密码是否合法(无需再次判断二次密码|因为验证过两次密码是否匹配)
+        if(!password.matches(Regex.PASSWORD.getPattern())) {
+            return ResponseData.New(HttpCode.AUTH_REGISTER__PASSWORD_REGEX_FAILED, "Illegal password.");
+        }
 
         if("".equals(data)) {
             return ResponseData.New(HttpCode.AUTH_SETPASSWORD__DATA_EMPTY, "Data cannot be empty.");
@@ -276,7 +296,7 @@ public class AuthController {
         authService.deleteRegisterMail(email);
 
         //重设用户密码
-
+        authService.setPassword(securityService.findUserIdByEmail(email), password2);
 
         return ResponseData.New(HttpCode.COMMON__SUCCESS, "Set password success.");
 

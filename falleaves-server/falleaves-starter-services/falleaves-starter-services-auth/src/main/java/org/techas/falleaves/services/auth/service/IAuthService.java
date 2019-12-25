@@ -22,5 +22,5 @@ public interface IAuthService {
 
     void deleteResetPasswordMail(String email);
 
-    void setPassword(String email, String password);
+    boolean setPassword(Long id, String password);
 }

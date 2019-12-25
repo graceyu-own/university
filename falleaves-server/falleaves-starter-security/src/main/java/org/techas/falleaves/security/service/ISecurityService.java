@@ -1,5 +1,7 @@
 package org.techas.falleaves.security.service;
 
+import org.techas.falleaves.model.UserInfoEntity;
+
 public interface ISecurityService {
 
     boolean hasUserById(Long id);
@@ -16,5 +18,8 @@ public interface ISecurityService {
 
     boolean isFreqMailByEmail(String email);
 
+    UserInfoEntity findUserByEmail(String email);
+
+    long findUserIdByEmail(String email);
 
 }
