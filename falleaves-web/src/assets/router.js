@@ -7,7 +7,7 @@ import Register from "@/components/auth/Register";
 import Center from "@/components/Center";
 import ResetPassword from "@/components/auth/ResetPassword";
 import SetPassword from "@/components/auth/SetPassword";
-import Info from "@/components/Info";
+import Info from "@/components/info/Info";
 
 Vue.use(Router);
 

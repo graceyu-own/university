@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import CommonHeader from "@/components/common/haader/CommonHeader";
+    import CommonHeader from "@/components/common/header/CommonHeader";
 
     export default {
         name: "SetPassword",

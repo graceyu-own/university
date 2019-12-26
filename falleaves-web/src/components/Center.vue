@@ -1,18 +1,23 @@
 <template>
     <section id="center">
-        <common-menu></common-menu>
+        <div class="center-inner">
+            <user-center></user-center>
+            <bottom-menu></bottom-menu>
+        </div>
+
     </section>
 </template>
 
 <script>
-
-    import CommonMenu from '@/components/common/CommonMenu'
+    import BottomMenu from "@/components/common/menu/BottomMenu";
+    import UserCenter from "@/components/UserCenter";
 
     export default {
         name: "Center",
 
         components: {
-            CommonMenu
+            UserCenter,
+            BottomMenu,
         }
     }
 </script>
@@ -22,7 +27,7 @@
     #center {
         width: 100%;
         height: 100%;
-        background-color: rgba(52, 52, 52, 0.1);
+        background-color: rgba(253, 253, 253, 1);
     }
 
 </style>

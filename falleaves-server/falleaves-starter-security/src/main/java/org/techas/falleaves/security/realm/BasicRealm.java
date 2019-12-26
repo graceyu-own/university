@@ -23,6 +23,7 @@ public class BasicRealm extends AuthorizingRealm {
     @Autowired
     private UserLoginRepository userLoginRepository;
 
+    @Override
     public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
 
         String identifier = (String) token.getPrincipal();
@@ -46,7 +47,7 @@ public class BasicRealm extends AuthorizingRealm {
             throw new LockedAccountException("Incorrect credentials");
         }
 
-        return new SimpleAuthenticationInfo(identifier, credential, getName());
+        return new SimpleAuthenticationInfo(userEntity, credential, getName());
     }
 
     @Override

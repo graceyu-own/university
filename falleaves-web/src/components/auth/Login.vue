@@ -16,7 +16,7 @@
                         <el-row class="content-password">
                             <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="密码" clearable show-password /> </el-col>
                         </el-row>
-                        <el-row v-if="false">
+                        <el-row v-if="true">
                             <el-col :span="24" style="position: relative">
                                 <el-button type="danger" style="width: inherit;" @click="TryBehaviorValid()" v-if="behaviorValidStatus === 1">点击验证</el-button>
                                 <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">验证中</el-button>
@@ -29,6 +29,7 @@
                         <el-row class="content-action">
                             <el-col :span="24" style="text-align: right;">
                                 <el-link style="margin-right: 10px; font-size: 1.5rem;" :underline="false" type="info" @click="$router.push('/auth/reset-password')" >找回我的账号</el-link>
+                                <el-link style="margin-right: 10px; font-size: 1.5rem;" :underline="false" type="info" @click="$router.push('/auth/register')" >立刻注册</el-link>
                             </el-col>
                         </el-row>
                     </section>
@@ -40,7 +41,7 @@
 
 <script>
 
-    import BackHeader from "@/components/common/haader/BackHeader";
+    import BackHeader from "@/components/common/header/BackHeader";
     export default {
 
         name: "Login",

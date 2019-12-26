@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import BackHeader from "@/components/common/haader/BackHeader";
+    import BackHeader from "@/components/common/header/BackHeader";
 
     export default {
         name: "ResetPassword",

@@ -37,6 +37,11 @@ public class AuthService implements IAuthService {
     private ICacheService<String, String> simpleRedisCacheService;
 
     @Override
+    public boolean checkLogin() {
+        return null != SecurityUtils.getSubject().getPrincipal();
+    }
+
+    @Override
     @Transactional
     public void login(String identifier, String credential) {
 

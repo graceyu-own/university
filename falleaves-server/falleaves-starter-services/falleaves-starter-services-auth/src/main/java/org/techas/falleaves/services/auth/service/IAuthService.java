@@ -6,6 +6,8 @@ import org.techas.falleaves.model.UserLoginEntity;
 
 public interface IAuthService {
 
+    boolean checkLogin();
+
     void login(String identifier, String credential) throws AuthorizationException;
 
     boolean register(String nickname, String email, String password);

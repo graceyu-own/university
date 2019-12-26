@@ -41,15 +41,15 @@ public class AuthController {
         @RequestParam(value = "behaviorValid", defaultValue = "") String behaviorValid
     ){
 
-        if (null == identifier || identifier.equals("")) {
+        if ("".equals(identifier)) {
             return ResponseData.New(HttpCode.AUTH_LOGIN__IDENTIFIER_EMPTY, "Nickname cannot be empty.");
         }
 
-        if (null == credential || credential.equals("")) {
+        if ("".equals(credential)) {
             return ResponseData.New(HttpCode.AUTH_LOGIN__CREDENTIAL_EMPTY, "Password cannot be empty.");
         }
 
-        if(null == behaviorValid || behaviorValid.equals("")) {
+        if("".equals(behaviorValid)) {
             return ResponseData.New(HttpCode.BEHAVIOR_VALID__FAILED, "Behavior verification failed.");
         }
 
@@ -219,6 +219,8 @@ public class AuthController {
             return ResponseData.New(HttpCode.AUTH_FORGETPASSWORD__EMAIL_EMPTY, "Email cannot be empty.");
         }
 
+        // TODO: 2019/12/26 可添加的邮箱正则判断
+
         // check 是否存在邮箱
         if(!securityService.hasEmail(email)) {
             return ResponseData.New(HttpCode.AUTH_FORGETPASSWORD__EMAIL_NOT_EXISTS, "Email not exists.");
@@ -305,6 +307,16 @@ public class AuthController {
         authService.deleteRegisterMail(email);
 
         return ResponseData.New(HttpCode.COMMON__SUCCESS, "Set password success.");
+    }
+
+    @RequestMapping("/checkLogin")
+    public ResponseData<String> isLogin() {
+
+        if(!authService.checkLogin()) {
+            return ResponseData.New(HttpCode.COMMON__UNAUTHORIZED, "Not logged in.");
+        }
+
+        return ResponseData.New(HttpCode.COMMON__SUCCESS, "Already logged in.");
 
     }
 

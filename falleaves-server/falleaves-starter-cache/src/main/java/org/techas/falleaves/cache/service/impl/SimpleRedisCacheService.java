@@ -16,7 +16,7 @@ public class SimpleRedisCacheService<K extends String, V> implements ICacheServi
     @Override
     public boolean set(K key, V value, long expireTime) {
         try {
-            if(null != key && !key.equals("") && null != value) {
+            if(!"".equals(key) && null != value) {
                 redisTemplate.boundValueOps(key).set(value, expireTime, TimeUnit.MILLISECONDS);
                 return true;
             }
@@ -29,7 +29,7 @@ public class SimpleRedisCacheService<K extends String, V> implements ICacheServi
 
     @Override
     public boolean delete(K key) {
-        if(null != key && !key.equals("")) {
+        if(!"".equals(key)) {
             return has(key);
         }
         return false;
@@ -37,7 +37,7 @@ public class SimpleRedisCacheService<K extends String, V> implements ICacheServi
 
     @Override
     public V get(K key) {
-        if(null != key && !key.equals("")) {
+        if(!"".equals(key)) {
             return redisTemplate.boundValueOps(key).get();
         }
         return null;
@@ -45,7 +45,7 @@ public class SimpleRedisCacheService<K extends String, V> implements ICacheServi
 
     @Override
     public boolean has(K key) {
-        if(null != key && !key.equals("")) {
+        if(!"".equals(key)) {
             Boolean found = redisTemplate.hasKey(key);
             if(null != found) {
                 return found;
