@@ -51,6 +51,7 @@ public enum HttpCode {
         AUTH_SETPASSWORD__DATA_EMPTY(401, 500),
         AUTH_SETPASSWORD__DATA_EXCEPT(401, 501),
         AUTH_SETPASSWORD__EXPIRE(401, 502),
+        AUTH_SETPASSWORD__EMAIL_NOT_EXISTS(401, 503),
 
 
         // Behavior Valid

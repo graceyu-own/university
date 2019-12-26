@@ -20,6 +20,4 @@ public interface ISecurityService {
 
     UserInfoEntity findUserByEmail(String email);
 
-    long findUserIdByEmail(String email);
-
 }

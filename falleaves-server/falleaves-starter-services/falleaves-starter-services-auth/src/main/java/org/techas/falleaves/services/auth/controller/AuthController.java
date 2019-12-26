@@ -10,12 +10,12 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.techas.falleaves.model.UserInfoEntity;
 import org.techas.falleaves.security.service.ISecurityService;
 import org.techas.falleaves.services.auth.service.IAuthService;
 import org.techas.falleaves.utils.*;
 
 import javax.annotation.Resource;
-import java.util.Base64;
 
 @RestController
 public class AuthController {
@@ -249,6 +249,10 @@ public class AuthController {
     @RequestMapping("/setPassword")
     public ResponseData<String> setPassword(String data, String password, String password2) {
 
+        if("".equals(data)) {
+            return ResponseData.New(HttpCode.AUTH_SETPASSWORD__DATA_EMPTY, "Data except.");
+        }
+
         // check 密码是否为空
         if("".equals(password)) {
             return ResponseData.New(HttpCode.AUTH_REGISTER__PASSWORD_EMPTY, "Password cannot be empty");
@@ -267,10 +271,6 @@ public class AuthController {
         // check 密码是否合法(无需再次判断二次密码|因为验证过两次密码是否匹配)
         if(!password.matches(Regex.PASSWORD.getPattern())) {
             return ResponseData.New(HttpCode.AUTH_REGISTER__PASSWORD_REGEX_FAILED, "Illegal password.");
-        }
-
-        if("".equals(data)) {
-            return ResponseData.New(HttpCode.AUTH_SETPASSWORD__DATA_EMPTY, "Data cannot be empty.");
         }
 
         String plainText = DesUtils.decodeBase64(data);
@@ -292,11 +292,17 @@ public class AuthController {
             return ResponseData.New(HttpCode.AUTH_SETPASSWORD__EXPIRE, "This url already expire.");
         }
 
+        UserInfoEntity userInfoEntity = securityService.findUserByEmail(email);
+        if(null == userInfoEntity) {
+            return ResponseData.New(HttpCode.AUTH_SETPASSWORD__EMAIL_NOT_EXISTS, "Email not exists.");
+        }
+
+        if(!authService.setPassword(userInfoEntity.getUid(), password)) {
+            return ResponseData.New(HttpCode.COMMON__INTERNET_SERVER_ERROR, "Unknown error.");
+        }
+
         // 删除找回密码邮件的缓存, 防止下次使用
         authService.deleteRegisterMail(email);
-
-        //重设用户密码
-        authService.setPassword(securityService.findUserIdByEmail(email), password2);
 
         return ResponseData.New(HttpCode.COMMON__SUCCESS, "Set password success.");
 

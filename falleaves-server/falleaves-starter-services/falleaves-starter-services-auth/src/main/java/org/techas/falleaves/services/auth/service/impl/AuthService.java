@@ -37,6 +37,7 @@ public class AuthService implements IAuthService {
     private ICacheService<String, String> simpleRedisCacheService;
 
     @Override
+    @Transactional
     public void login(String identifier, String credential) {
 
         Subject subject = SecurityUtils.getSubject();
@@ -76,7 +77,6 @@ public class AuthService implements IAuthService {
 
 
     @Override
-    @Transactional
     public boolean sendRegisterMail(String email) {
         String code = Utils.getRandomString(6).toUpperCase();
         System.out.println("本次验证码为: " + code);

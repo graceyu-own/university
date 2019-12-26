@@ -92,9 +92,4 @@ public class SecurityService implements ISecurityService {
         return userInfoRepository.findOne(Example.of(new UserInfoEntity().setEmail(email))).orElse(null);
     }
 
-    @Override
-    public long findUserIdByEmail(String email) {
-        return findUserByEmail(email).getId();
-    }
-
 }
