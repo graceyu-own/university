@@ -1,27 +1,27 @@
 <template>
-    <section id="resetPassword">
+    <section class="auth">
         <back-header></back-header>
-        <div class="resetPassword-inner">
+        <div class="auth-inner">
             <transition name="effect-fromBottomToTop">
                 <div class="inner-content" v-loading="load" v-on:click.stop="() => {}" v-show="show">
                     <section class="content-header">
                         <el-row>
-                            <el-col><p style="text-align: center; font-size: 2rem;">找回密码</p></el-col>
+                            <el-col><p style="text-align: center; font-size: 2rem;">Retrieve Password</p></el-col>
                         </el-row>
                     </section>
                     <section class="content-body">
                         <el-row class="content-email">
-                            <el-col :span="24"><el-input v-model="form.emailInput" placeholder="邮箱" clearable /></el-col>
+                            <el-col :span="24"><el-input v-model="form.emailInput" placeholder="Email" clearable /></el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24" style="position: relative">
-                                <el-button type="danger" style="width: inherit;" @click="TryBehaviorValid()" v-if="behaviorValidStatus === 1">验证</el-button>
-                                <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">验证中</el-button>
-                                <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="behaviorValidStatus === 3">验证成功</el-button>
+                                <el-button type="danger" style="width: inherit;" @click="TryBehaviorValid()" v-if="behaviorValidStatus === 1">Touch Verify</el-button>
+                                <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">Verifying...</el-button>
+                                <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="behaviorValidStatus === 3">Verify Successful</el-button>
                             </el-col>
                         </el-row>
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryResetPassword()">下一步</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryResetPassword()">Next</el-button></el-col>
                         </el-row>
                     </section>
                 </div>
@@ -120,45 +120,5 @@
 </script>
 
 <style scoped lang="less">
-
-    #resetPassword {
-
-        display: flex;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: rgba(255, 255, 255, 0.998);
-
-        & > .resetPassword-inner {
-            display: flex;
-            width: 100%;
-            margin: auto;
-
-            & > .inner-content {
-                width: 100%;
-                max-width: 600px;
-                height: 100%;
-                padding: 50px 25px;
-                margin: auto;
-
-                & > .content-header {
-                    margin-bottom: 20px;
-                }
-
-                & > .content-body {
-
-                    max-height: calc(70vh - 120px);
-                    overflow: auto;
-
-                    & > div {
-                        margin-top: 20px;
-                    }
-
-                    & > div:first-child {
-                        margin-top: 0;
-                    }
-                }
-            }
-        }
-    }
+    @import "common/auth";
 </style>

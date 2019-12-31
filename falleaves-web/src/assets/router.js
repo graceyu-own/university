@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import Index from "@/components/Index";
 import Login from "@/components/auth/Login";
 import Register from "@/components/auth/Register";
-import Center from "@/components/Center";
+import Center from "@/components/center/Center";
 import ResetPassword from "@/components/auth/ResetPassword";
 import SetPassword from "@/components/auth/SetPassword";
 import Info from "@/components/info/Info";
@@ -48,6 +48,9 @@ export default new Router({
             path: '/center',
             name: 'center',
             component: Center,
+            meta: {
+                keepAlive: true
+            }
         }
     ]
 })

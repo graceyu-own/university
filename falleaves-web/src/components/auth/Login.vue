@@ -1,35 +1,35 @@
 <template>
-    <section id="login">
+    <section id="login" class="auth">
         <back-header></back-header>
-        <div class="login-inner">
+        <div class="auth-inner">
             <transition name="effect-fromBottomToTop">
                 <div class="inner-content" v-loading="load" v-on:click.stop="() => {}" v-show="show">
                     <section class="content-header">
                         <el-row>
-                            <el-col><p style="text-align: center; font-size: 2rem;">登录您的账号</p></el-col>
+                            <el-col><p style="text-align: center; font-size: 2rem;">Log in to your account</p></el-col>
                         </el-row>
                     </section>
                     <section class="content-body">
                         <el-row class="content-email">
-                            <el-col :span="24"><el-input v-model="form.identifierInput" placeholder="邮箱" clearable /></el-col>
+                            <el-col :span="24"><el-input v-model="form.identifier" placeholder="Nickname / Email" clearable /></el-col>
                         </el-row>
                         <el-row class="content-password">
-                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="密码" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="Password" clearable show-password /> </el-col>
                         </el-row>
                         <el-row v-if="true">
-                            <el-col :span="24" style="position: relative">
-                                <el-button type="danger" style="width: inherit;" @click="TryBehaviorValid()" v-if="behaviorValidStatus === 1">点击验证</el-button>
-                                <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">验证中</el-button>
-                                <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="behaviorValidStatus === 3">验证成功</el-button>
+                            <el-col :span="24">
+                                <el-button type="danger" style="width: inherit;" @click="TryBehaviorValid()" v-if="behaviorValidStatus === 1">Touch Verify</el-button>
+                                <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">Verifying...</el-button>
+                                <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="behaviorValidStatus === 3">Verify Successful</el-button>
                             </el-col>
                         </el-row>
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryLogin()">现在登录</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryLogin()">Login</el-button></el-col>
                         </el-row>
                         <el-row class="content-action">
                             <el-col :span="24" style="text-align: right;">
-                                <el-link style="margin-right: 10px; font-size: 1.5rem;" :underline="false" type="info" @click="$router.push('/auth/reset-password')" >找回我的账号</el-link>
-                                <el-link style="margin-right: 10px; font-size: 1.5rem;" :underline="false" type="info" @click="$router.push('/auth/register')" >立刻注册</el-link>
+                                <el-link style="margin-right: 10px; font-size: 1.5rem;" :underline="false" type="info" @click="$router.push('/auth/reset-password')" >Forget Password</el-link>
+                                <el-link style="margin-right: 10px; font-size: 1.5rem;" :underline="false" type="info" @click="$router.push('/auth/register')" >Register</el-link>
                             </el-col>
                         </el-row>
                     </section>
@@ -42,6 +42,7 @@
 <script>
 
     import BackHeader from "@/components/common/header/BackHeader";
+
     export default {
 
         name: "Login",
@@ -54,9 +55,9 @@
                 behaviorValidStatus: 1,
 
                 form: {
-                    identifierInput     : "",
-                    passwordInput       : "",
-                    behaviorValid       : "",
+                    identifier    : "",
+                    credential    : "",
+                    behaviorValid : "",
                 },
             }
         },
@@ -94,9 +95,11 @@
                 this.load = true;
 
                 this.request.AuthLogin(
-                    this.form.identifierInput,
-                    this.form.passwordInput,
+                    this.form.identifier,
+                    this.form.credential,
                     this.form.behaviorValid,
+
+                    // success
                     r => {
                         if(r.codeType !== 200) {
                             this.$notify.error({
@@ -107,9 +110,12 @@
                             this.$notify.success({
                                 message: r.data,
                                 duration: 2000
-                            })
+                            });
+                            this.attr.set("token", true);
                         }
                     },
+
+                    // error
                     error => {
 
                         this.$notify.error({
@@ -118,15 +124,12 @@
                         })
                     },
 
+                    // finally
                     () => {
                         this.load = false;
                     }
                 );
             },
-
-            ToForgetPassword: function() {
-                this.$router.push("/auth/forgetPassword");
-            }
         },
 
         mounted() {
@@ -137,44 +140,6 @@
 
 <style scoped lang="less">
 
-    #login {
+    @import "common/auth";
 
-        display: flex;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: rgba(255, 255, 255, 0.998);
-
-        & > .login-inner {
-            width: 100%;
-            margin: auto;
-            display: flex;
-
-            & > .inner-content {
-                width: 100%;
-                max-width: 600px;
-                height: 100%;
-                padding: 50px 25px;
-                margin: auto;
-
-                & > .content-header {
-                    margin-bottom: 20px;
-                }
-
-                & > .content-body {
-
-                    max-height: calc(70vh - 120px);
-                    overflow: auto;
-
-                    & > div{
-                        margin-top: 20px;
-                    }
-
-                    & > div:first-child {
-                        margin-top: 0;
-                    }
-                }
-            }
-        }
-    }
 </style>

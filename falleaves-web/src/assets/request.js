@@ -1,5 +1,4 @@
 import axios from 'axios'
-import da from "element-ui/src/locale/lang/da";
 
 class Request{
 
@@ -11,6 +10,16 @@ class Request{
     /*_router = "http://localhost:8200";
     _authService = this._router + "/auth";*/
     _authService = "http://127.0.0.1:9100";
+
+    /*AuthCheckLogin (fn, errorfn = () => {}, finallyfn = () => {}) {
+        axios.get(this._authService + "/checkLogin").then(r => {
+            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
+        }).catch(error => {
+            errorfn(error);
+        }).finally(() => {
+            finallyfn();
+        })
+    }*/
 
     AuthBehavior (fn, errorfn = () => {}, finallyfn = () => {}) {
         axios.get(this._authService + "/checkBehavior").then(r => {
@@ -56,6 +65,21 @@ class Request{
         })
     }
 
+    SendRegisterMail (email, fn, errorfn = () => {}, finallyfn = () => {}) {
+
+        let f = new FormData();
+
+        f.append("email", email);
+
+        axios.post(this._authService + "/sendRegisterMail", f).then(r => {
+            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
+        }).catch(error => {
+            errorfn(error);
+        }).finally(() => {
+            finallyfn()
+        })
+    }
+
     AuthResetPassword (email, fn, errorfn = () => {}, finallyfn = () => {}) {
 
         let f = new FormData();
@@ -70,21 +94,6 @@ class Request{
             finallyfn();
         })
 
-    }
-
-    SendRegisterMail (email, fn, errorfn = () => {}, finallyfn = () => {}) {
-
-        let f = new FormData();
-
-        f.append("email", email);
-
-        axios.post(this._authService + "/sendRegisterMail", f).then(r => {
-            fn(new ResponseData(r.data.codeType, r.data.codeAppend, r.data.data));
-        }).catch(error => {
-            errorfn(error);
-        }).finally(() => {
-            finallyfn()
-        })
     }
 
     AuthSetPassword (data, password, password2, fn, errorfn = () => {}, finallyfn = () => {}) {

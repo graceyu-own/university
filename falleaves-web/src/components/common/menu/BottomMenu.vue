@@ -5,19 +5,19 @@
                 <el-col class="row-col" :span="8">
                     <div>
                         <i class="el-icon-view"></i><br />
-                        <span>发现</span>
+                        <span>Notice</span>
                     </div>
                 </el-col>
                 <el-col class="row-col" :span="8">
                     <div>
                         <i class="el-icon-search"></i><br />
-                        <span>查找</span>
+                        <span>Search</span>
                     </div>
                 </el-col>
                 <el-col class="row-col" :span="8">
                     <div>
                         <i class="el-icon-user"></i><br />
-                        <span>我的</span>
+                        <span>My</span>
                     </div>
                 </el-col>
             </el-row>
@@ -27,7 +27,19 @@
 
 <script>
     export default {
-        name: "BottomMenu"
+        name: "BottomMenu",
+
+        mounted() {
+
+            document.querySelectorAll(".menu-inner > .inner-row > .row-col > div").forEach((value, index) => {
+                value.addEventListener("click", () => {
+
+                    this.$emit('ToggleMenu', index)
+                })
+            })
+
+        }
+
     }
 </script>
 
@@ -41,7 +53,7 @@
         bottom: 0;
         left: 0;
         background-color:rgba(255, 255, 255, 0.94);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0 10px rgba(47, 47, 47, 0.1);
 
         & > .menu-inner {
 
@@ -59,6 +71,7 @@
                         display: inline-block;
                         margin: auto;
                         text-align: center;
+                        cursor: pointer;
 
                         & > i {
                             font-size: 2.3rem;

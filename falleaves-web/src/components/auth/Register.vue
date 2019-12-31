@@ -1,39 +1,39 @@
 <template>
-    <section id="register">
+    <section class="auth">
         <back-header></back-header>
-        <div class="register-inner">
+        <div class="auth-inner">
             <transition name="effect-fromBottomToTop">
                 <div class="inner-content" v-loading="load" v-on:click.stop="() => {}" v-show="show">
                     <section class="content-header">
                         <el-row>
-                            <el-col><p style="text-align: center; font-size: 2rem;">注册新的账号</p></el-col>
+                            <el-col><p style="text-align: center; font-size: 2rem;">Sign up for a new account</p></el-col>
                         </el-row>
                     </section>
                     <section class="content-body">
                         <el-row class="content-nickname">
-                            <el-col :span="24"><el-input v-model="form.nicknameInput" placeholder="用户名" clearable /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.nicknameInput" placeholder="Nickname" clearable /> </el-col>
                         </el-row>
                         <el-row class="content-email">
                             <el-col :span="24">
-                                <el-input v-model="form.emailInput" placeholder="邮箱" clearable>
+                                <el-input v-model="form.emailInput" placeholder="Email" clearable>
                                     <el-button slot="append" type="primary" :loading="emailBtnLoading" @click="TrySendRegisterMail()">{{emailBtnText}}</el-button>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-row class="content-emailValid">
-                            <el-col :span="24"><el-input v-model="form.emailValidInput" placeholder="邮箱验证码" clearable /></el-col>
+                            <el-col :span="24"><el-input v-model="form.emailValidInput" placeholder="Email Code" clearable /></el-col>
                         </el-row>
                         <el-row class="content-password">
-                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="密码" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput" placeholder="Password" clearable show-password /> </el-col>
                         </el-row>
                         <el-row class="content-password2">
-                            <el-col :span="24"><el-input v-model="form.passwordInput2" placeholder="再次输入密码" clearable show-password /> </el-col>
+                            <el-col :span="24"><el-input v-model="form.passwordInput2" placeholder="Confirm Password" clearable show-password /> </el-col>
                         </el-row>
                         <!--<el-row>
                             <el-col :span="24"><el-button type="danger" style="width: inherit;" disabled>Touch Verify</el-button></el-col>
                         </el-row>-->
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryRegister()">注册</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryRegister()">Register</el-button></el-col>
                         </el-row>
                         <el-row class="content-action">
                             <el-col :span="24" style="text-align: right;">
@@ -57,7 +57,7 @@
                 show: false,
                 load: false,
 
-                emailBtnText    : "发送",
+                emailBtnText    : "Send",
                 emailBtnLoading : false,
                 emailBtnDisabled: false,
                 emailBtnCountdown : 10,
@@ -187,44 +187,5 @@
 </script>
 
 <style scoped lang="less">
-
-    #register {
-
-        display: flex;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: rgba(255, 255, 255, 0.998);
-
-        & > .register-inner {
-            display: flex;
-            width: 100%;
-            margin: auto;
-
-            & > .inner-content {
-                width: 100%;
-                max-width: 600px;
-                padding: 50px 25px;
-                margin: auto;
-
-                & > .content-header {
-                    margin-bottom: 20px;
-                }
-
-                & > .content-body {
-
-                    max-height: calc(70vh - 120px);
-                    overflow: auto;
-
-                    & > div{
-                        margin-top: 20px;
-                    }
-
-                    & > div:first-child {
-                        margin-top: 0;
-                    }
-                }
-            }
-        }
-    }
+    @import "common/auth";
 </style>

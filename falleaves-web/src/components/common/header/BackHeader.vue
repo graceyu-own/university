@@ -1,7 +1,7 @@
 <template>
     <section id="backHeader">
         <div class="backHeader-backButton">
-            <span class="el-icon-arrow-left" @click="ToBack()"><span style="font-weight: normal">返回</span></span>
+            <span class="el-icon-arrow-left" @click="ToBack()"><span style="font-weight: normal">Back</span></span>
         </div>
         <div class="backHeader-title">
             <span>FALLEAVES</span>
