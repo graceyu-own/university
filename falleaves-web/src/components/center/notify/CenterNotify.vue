@@ -12,7 +12,7 @@
                         <h5>2019 / 12 / 30 17:03:25</h5>
                     </div>
                     <div class="section-content">
-                        <img class="content-image" src="../../../public/images/5.jpg" alt="" />
+                        <img class="content-image" src="../../../../public/images/5.jpg" alt="" />
                         <div class="content-item">
                             <el-row class="item-row">
                                 <el-col class="row-col row-left" :span="4">
@@ -32,7 +32,7 @@
                         <h5>2019 / 12 / 30 17:03:25</h5>
                     </div>
                     <div class="section-content">
-                        <img class="content-image" src="../../../public/images/5.jpg" alt="" />
+                        <img class="content-image" src="../../../../public/images/5.jpg" alt="" />
                         <div class="content-item">
                             <el-row class="item-row">
                                 <el-col class="row-col row-left" :span="4">
@@ -52,7 +52,7 @@
                         <h5>2019 / 12 / 30 17:03:25</h5>
                     </div>
                     <div class="section-content">
-                        <img class="content-image" src="../../../public/images/5.jpg" alt="" />
+                        <img class="content-image" src="../../../../public/images/5.jpg" alt="" />
                         <div class="content-item">
                             <el-row class="item-row">
                                 <el-col class="row-col row-left" :span="4">
@@ -74,7 +74,7 @@
 
 <script>
     export default {
-        name: "FindCenter",
+        name: "CenterNotify",
 
         data() {
             return {
@@ -93,7 +93,7 @@
 
 <style scoped lang="less">
 
-    @import "common/center";
+    @import "../../../assets/css/center";
 
     #notify-center {
         width: 100%;

@@ -7,10 +7,10 @@
                 </div>
             </div>
             <div class="inner-body" ref="innerBody">
-                <section class="body-section body-login" v-if="!isLogin">
+                <section class="body-section body-login" v-if="/*isLogin*/true">
                     <el-button type="info" @click="ToLogin">Login to unlock more benefits</el-button>
                 </section>
-                <section class="body-section body-header" v-if="isLogin">
+                <section class="body-section body-header" v-if="/*isLogin*/true">
                     <div class="header-content">
                         <p class="content-nickname">Grace Yu</p>
                         <p class="content-description">This is a description...</p>
@@ -19,7 +19,7 @@
                         <el-avatar :fit="'fill'" src="/images/5.jpg" :size="70"></el-avatar>
                     </div>
                 </section>
-                <section class="body-section body-user" v-if="isLogin">
+                <section class="body-section body-user" v-if="/*isLogin*/true">
                     <ul class="ul-list">
                         <li class="list-item"><i class="el-icon-postcard item-icon-left"></i><span class="item-msg">Messages</span><i class="el-icon-arrow-right item-icon-right"></i></li>
                         <li class="list-item"><i class="el-icon-postcard item-icon-left"></i><span class="item-msg">Comments</span><i class="el-icon-arrow-right item-icon-right"></i></li>
@@ -40,12 +40,12 @@
 
 <script>
     export default {
-        name: "UserCenter",
+        name: "CenterUser",
 
         data() {
             return {
 
-                isLogin: /*this.attr.has("token")*/true,
+                isLogin: this.attr.has("token"),
                 headerSplit: false
 
             }
@@ -71,7 +71,7 @@
 
 <style scoped lang="less">
 
-    @import "common/center";
+    @import "../../../assets/css/center";
 
     #user-center {
         width: 100%;

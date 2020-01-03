@@ -9,13 +9,14 @@
     export default {
         name: 'app',
         components: {
-
-
-        }
+        },
     }
 </script>
 
 <style lang="less">
+
+    @import "assets/css/common/init";
+    @import "assets/css/common/effects";
 
     #app {
         width: 100%;

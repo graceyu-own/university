@@ -120,5 +120,5 @@
 </script>
 
 <style scoped lang="less">
-    @import "common/auth";
+    @import "../../assets/css/auth";
 </style>

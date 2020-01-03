@@ -167,7 +167,7 @@
                         break;
                     case 2:
                         let t = setInterval(() => {
-                            if(this.emailBtnCountdown <= 0) {
+                            if (this.emailBtnCountdown <= 0) {
                                 clearInterval(t);
                                 this.SetEmailValidButtonStatus(0);
                                 return;
@@ -187,5 +187,5 @@
 </script>
 
 <style scoped lang="less">
-    @import "common/auth";
+    @import "../../assets/css/auth";
 </style>

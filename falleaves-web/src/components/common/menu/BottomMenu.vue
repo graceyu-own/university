@@ -17,7 +17,7 @@
                 <el-col class="row-col" :span="8">
                     <div>
                         <i class="el-icon-user"></i><br />
-                        <span>My</span>
+                        <span>User</span>
                     </div>
                 </el-col>
             </el-row>

@@ -11,46 +11,46 @@
                     <div class="section-title">
                         <span>Hot Search</span>
                     </div>
-                    <div class="section-list">
-                        <div class="list-item">
+                    <el-row class="section-list">
+                        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 10, offset: 1}" :md="{span: 10, offset: 1}" :lg="{span: 6, offset: 1}" class="list-item">
                             <el-row class="item-row">
                                 <el-col class="row-col row-left" :span="9">
-                                    <img class="left-image" src="../../../public/images/5.jpg" alt="" />
+                                    <img class="left-image" src="../../../../public/images/5.jpg" alt="" />
                                 </el-col>
                                 <el-col class="row-col row-middle" :span="9">
                                     <p class="middle-title">Institutional enquiry</p>
                                     <p class="middle-msg">This is nstitutional enquiry</p>
                                 </el-col>
                                 <el-col class="row-col row-right" :span="6">
-                                    <button class="right-button">Go</button>
+                                    <button class="right-button" @click="ToCenterSearchUniversity">Go</button>
                                 </el-col>
                             </el-row>
-                        </div>
-                        <div class="list-item">
+                        </el-col>
+                        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 10, offset: 1}" :md="{span: 10, offset: 1}" :lg="{span: 6, offset: 1}" class="list-item">
                             <el-row class="item-row">
                                 <el-col class="row-col row-left" :span="9">
-                                    <img class="left-image" src="../../../public/images/5.jpg" alt="" />
+                                    <img class="left-image" src="../../../../public/images/5.jpg" alt="" />
                                 </el-col>
                                 <el-col class="row-col row-middle" :span="9">
                                     <p class="middle-title">Professional enquiry</p>
                                     <p class="middle-msg">This is professional enquiry</p>
                                 </el-col>
                                 <el-col class="row-col row-right" :span="6">
-                                    <button class="right-button">Go</button>
+                                    <button class="right-button" @click="ToCenterSearchMajor">Go</button>
                                 </el-col>
                             </el-row>
-                        </div>
-                    </div>
+                        </el-col>
+                    </el-row>
                 </div>
                 <div class="body-section body-other">
                     <div class="section-title">
                         <span>Other Search</span>
                     </div>
-                    <div class="section-list">
-                        <div class="list-item">
+                    <el-row class="section-list">
+                        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 10, offset: 1}" :md="{span: 10, offset: 1}" :lg="{span: 6, offset: 1}" class="list-item">
                             <el-row class="item-row">
                                 <el-col class="row-col row-left" :span="9">
-                                    <img class="left-image" src="../../../public/images/5.jpg" alt="" />
+                                    <img class="left-image" src="../../../../public/images/5.jpg" alt="" />
                                 </el-col>
                                 <el-col class="row-col row-middle" :span="9">
                                     <p class="middle-title">Institutional Assessment</p>
@@ -60,8 +60,8 @@
                                     <button class="right-button">Go</button>
                                 </el-col>
                             </el-row>
-                        </div>
-                    </div>
+                        </el-col>
+                    </el-row>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
 
 <script>
     export default {
-        name: "SearchCenter",
+        name: "CenterSearch",
 
         data() {
             return {
@@ -78,11 +78,21 @@
                 headerSplit: false
             }
         },
+
+        methods: {
+            ToCenterSearchUniversity() {
+                this.$router.push("/center-search-university");
+            },
+
+            ToCenterSearchMajor() {
+                this.$router.push("/center-search-major");
+            }
+        }
     }
 </script>
 
 <style scoped lang="less">
-    @import "common/center";
+    @import "../../../assets/css/center";
 
     #search-center {
         width: 100%;
@@ -116,9 +126,8 @@
                     & > .section-list {
 
                         & > .list-item {
-                            width: 100%;
-                            background-color: rgba(250, 250, 250, 1);
-                            box-shadow: 0 0 10px rgba(45, 45, 45, 0.2);
+                            background-color: rgba(255, 255, 255, 1);
+                            box-shadow: 0 0 10px rgba(45, 45, 45, 0.15);
                             border-radius: 5px;
                             margin-bottom: 20px;
 

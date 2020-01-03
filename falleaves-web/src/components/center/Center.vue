@@ -1,9 +1,9 @@
 <template>
     <section id="center">
         <div class="center-inner">
-            <find-center v-show="menuIndex === 0"></find-center>
-            <search-center v-show="menuIndex === 1"></search-center>
-            <user-center v-show="menuIndex === 2"></user-center>
+            <center-notify v-if="menuIndex === 0"></center-notify>
+            <center-search v-if="menuIndex === 1"></center-search>
+            <center-user v-if="menuIndex === 2"></center-user>
             <bottom-menu @ToggleMenu="ToggleMenu"></bottom-menu>
         </div>
 
@@ -12,9 +12,10 @@
 
 <script>
     import BottomMenu from "@/components/common/menu/BottomMenu";
-    import UserCenter from "@/components/center/UserCenter";
-    import FindCenter from "@/components/center/NotifyCenter";
-    import SearchCenter from "@/components/center/SearchCenter";
+    import CenterNotify from "@/components/center/notify/CenterNotify";
+    import CenterSearch from "@/components/center/search/CenterSearch";
+    import CenterUser from "@/components/center/user/CenterUser";
+
 
     export default {
         name: "Center",
@@ -34,9 +35,9 @@
         },
 
         components: {
-            SearchCenter,
-            FindCenter,
-            UserCenter,
+            CenterUser,
+            CenterSearch,
+            CenterNotify,
             BottomMenu,
         }
     }
@@ -47,7 +48,7 @@
     #center {
         width: 100%;
         height: 100%;
-        background-color: rgba(243, 243, 243, 1);
+        background-color: rgba(250, 250, 250, 1);
 
         & > .center-inner {
             height: 100%;
