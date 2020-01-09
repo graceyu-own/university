@@ -54,11 +54,11 @@
 
         methods: {
 
-            TryBehaviorValid: function() {
+            TryBehavior: function() {
 
                 this.behaviorValidStatus = 2;
 
-                this.request.AuthBehavior(
+                this.$request.auth.behavior(
                     r => {
 
                         if(r.codeType !== 200) {
@@ -84,7 +84,7 @@
 
                 this.load = true;
 
-                this.request.AuthResetPassword(this.form.emailInput,
+                this.$request.auth.resetPassword(this.form.emailInput,
                     r => {
                         if(r.codeType !== 200){
                             this.$notify.error({

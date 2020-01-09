@@ -78,7 +78,7 @@
 
                 this.load = true;
 
-                this.request.AuthRegister(
+                this.$request.auth.register(
                     this.form.nicknameInput,
                     this.form.emailInput,
                     this.form.emailValidInput,
@@ -120,7 +120,7 @@
 
                 this.SetEmailValidButtonStatus(1);
 
-                this.request.SendRegisterMail(
+                this.$request.auth.sendRegisterMail(
                     this.form.emailInput,
 
                     r => {

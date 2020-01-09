@@ -6,7 +6,7 @@
         <div class="university-inner">
 
             <!-- 页面头部 -->
-            <div class="inner-header" v-bind:class="{'box-shadow-bottom': headerSplit}">
+            <div class="inner-header">
                 <el-row class="header-list">
 
                     <!-- 头部搜索框 -->
@@ -113,7 +113,7 @@
                                             </div>
                                             <el-row class="section-list" :gutter="10">
                                                 <el-col class="list-item" :span="8">
-                                                    <el-tag type="info">请选择</el-tag>
+                                                    <el-tag type="info" @click.native="test">请选择</el-tag>
                                                 </el-col>
                                             </el-row>
                                         </div>
@@ -139,104 +139,23 @@
                 <el-row class="body-list">
 
                     <!-- 院校卡片项 -->
-                    <el-col class="list-item" :span="24">
+                    <el-col class="list-item" :span="24" v-for="(item, i) in paging.list" v-bind:key="i" @click.native="ToUniversityInfo(item.id)">
                         <el-col class="item-logo" :span="8">
-                            <img src="https://dss1.baidu.com/70cFfyinKgQFm2e88IuM_a/forum/pic/item/728b4710b912c8fc95e9ae6efb039245d688217e.jpg" alt="">
+                            <img :src="item.logo" alt="">
                         </el-col>
                         <el-col class="item-content" :span="16">
                             <el-col class="content-title" :span="24">
-                                <span>北京大学</span>
+                                <span>{{item.name}}</span>
                             </el-col>
                             <el-col class="content-nature" :span="24">
-                                <el-tag size="mini">双一流</el-tag>
-                                <el-tag size="mini">985</el-tag>
-                                <el-tag size="mini">211</el-tag>
+                                <el-tag size="mini" v-for="(nature, i) in item.nature" v-bind:key="i">{{nature}}</el-tag>
                             </el-col>
                             <el-col class="content-property" :span="24">
-                                <el-tag size="mini" type="warning">1425387 人气</el-tag>
-                                <el-tag size="mini" type="warning">9.9 评分</el-tag>
+                                <el-tag size="mini" type="warning">{{item.property.hot}}人气</el-tag>
+                                <el-tag size="mini" type="warning">{{item.property.score}}评分</el-tag>
                             </el-col>
                             <el-col class="content-tag" :span="24">
-                                <el-tag size="mini" type="success">知名院校</el-tag>
-                                <el-tag size="mini" type="success">氛围好</el-tag>
-                            </el-col>
-                        </el-col>
-                        <el-col class="item-hotMajor" :span="24">
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>软件工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>网络工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>建筑工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>我就是喜欢工程</el-button>
-                            </el-col>
-                        </el-col>
-                    </el-col>
-
-                    <!-- 院校卡片项 -->
-                    <el-col class="list-item" :span="24">
-                        <el-col class="item-logo" :span="8">
-                            <img src="https://dss1.baidu.com/70cFfyinKgQFm2e88IuM_a/forum/pic/item/728b4710b912c8fc95e9ae6efb039245d688217e.jpg" alt="">
-                        </el-col>
-                        <el-col class="item-content" :span="16">
-                            <el-col class="content-title" :span="24">
-                                <span>北京大学</span>
-                            </el-col>
-                            <el-col class="content-nature" :span="24">
-                                <el-tag size="mini">双一流</el-tag>
-                                <el-tag size="mini">985</el-tag>
-                                <el-tag size="mini">211</el-tag>
-                            </el-col>
-                            <el-col class="content-property" :span="24">
-                                <el-tag size="mini" type="warning">1425387 人气</el-tag>
-                                <el-tag size="mini" type="warning">9.9 评分</el-tag>
-                            </el-col>
-                            <el-col class="content-tag" :span="24">
-                                <el-tag size="mini" type="success">知名院校</el-tag>
-                                <el-tag size="mini" type="success">氛围好</el-tag>
-                            </el-col>
-                        </el-col>
-                        <el-col class="item-hotMajor" :span="24">
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>软件工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>网络工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>建筑工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>我就是喜欢工程</el-button>
-                            </el-col>
-                        </el-col>
-                    </el-col>
-
-                    <!-- 院校卡片项 -->
-                    <el-col class="list-item" :span="24">
-                        <el-col class="item-logo" :span="8">
-                            <img src="https://dss1.baidu.com/70cFfyinKgQFm2e88IuM_a/forum/pic/item/728b4710b912c8fc95e9ae6efb039245d688217e.jpg" alt="">
-                        </el-col>
-                        <el-col class="item-content" :span="16">
-                            <el-col class="content-title" :span="24">
-                                <span>北京大学</span>
-                            </el-col>
-                            <el-col class="content-nature" :span="24">
-                                <el-tag size="mini">双一流</el-tag>
-                                <el-tag size="mini">985</el-tag>
-                                <el-tag size="mini">211</el-tag>
-                            </el-col>
-                            <el-col class="content-property" :span="24">
-                                <el-tag size="mini" type="warning">1425387 人气</el-tag>
-                                <el-tag size="mini" type="warning">9.9 评分</el-tag>
-                            </el-col>
-                            <el-col class="content-tag" :span="24">
-                                <el-tag size="mini" type="success">知名院校</el-tag>
-                                <el-tag size="mini" type="success">氛围好</el-tag>
+                                <el-tag size="mini" type="success" v-for="(tag, i) in item.tag" v-bind:key="i">{{tag}}</el-tag>
                             </el-col>
                         </el-col>
                         <el-col class="item-hotMajor" :span="24">
@@ -258,11 +177,11 @@
 
                 <!-- 院校加载块(当滚动条滚动到底部时, 自动懒加载) -->
                 <div class="body-load">
-                    <div class="load-normal" v-if="false">
+                    <div class="load-normal" v-if="!paging.isLast">
                         <i class="el-icon-loading"></i>
                     </div>
-                    <div class="load-noData">
-                        <span> - 没有更多数据了-</span>
+                    <div class="load-noData" v-if="paging.isLast">
+                        <span> - 没有更多数据了 -</span>
                     </div>
                 </div>
             </div>
@@ -281,21 +200,40 @@
 
         data() {
             return {
-                isLogin: this.attr.has("token"),
+
+                // 登录状态
+                isLogin: this.$common.attr.has("token"),
+
+
                 headerSplit: false,
 
                 majorButtonSpan: 12,
 
                 sortMenuDisplay: false,
                 filterMenuDisplay: false,
+                isPageLast: false,
 
-                screenWidth: document.documentElement.clientWidth, //屏幕宽度
-                screenHeight: document.documentElement.clientHeight, //屏幕高度
+                paging: {
+                    size        : 10,
+                    now         : 1,
+                    total       : 4,
+
+                    isLast      : false,
+                    isLoading   : false,
+
+                    list        : [],
+                }
             }
         },
 
 
         methods: {
+
+            test: function() {
+                this.$selector.region(3, (nav) => {
+                    console.log(nav)
+                });
+            },
 
             ToggleSortMenuDisplay: function(display = null) {
                 if(null == display) {
@@ -314,31 +252,55 @@
                     this.filterMenuDisplay = display;
                 }
             },
+
+            PullUniversityData: function(page) {
+
+                // todo 模拟数据
+                for(let i = 0; i < 10; i++) {
+                    this.paging.list.push({
+                        id      : i,
+                        logo    : "https://dss1.baidu.com/70cFfyinKgQFm2e88IuM_a/forum/pic/item/728b4710b912c8fc95e9ae6efb039245d688217e.jpg",
+                        name    : "北京大学",
+                        nature  : ['双一流', '985', '211'],
+                        property: {
+                            hot     : page * (i + 1) * 1000,
+                            score   : 9.9
+                        },
+                        tag     : ['氛围好']
+                    });
+                }
+            },
+
+            ToUniversityInfo: function(id) {
+                this.$store.state.university.bodyScrollTop = this.$refs.innerBody.scrollTop;
+                this.$router.push("/center-search-university-info/" + id);
+            }
         },
 
-        watch: {
-           screenWidth(val) {
-               if(val <= 300) {
-                   this.majorButtonSpan = 24;
-               } else if(val <= 768) {
-                   this.majorButtonSpan = 12;
-               } else {
-                   this.majorButtonSpan = 6;
-               }
-           }
+        activated() {
+            this.$refs.innerBody.scrollTop = this.$store.state.university.bodyScrollTop;
         },
 
         mounted() {
 
-            window.addEventListener("resize", () => {
-                this.screenWidth = document.documentElement.clientWidth;
-                this.screenHeight = document.documentElement.clientHeight;
-            });
-
-
             this.$refs.innerBody.addEventListener("scroll", () => {
-                this.headerSplit = this.$refs.innerBody.scrollTop >= 20;
+
+                if(!this.paging.isLoading && !this.paging.isLast && this.$refs.innerBody.scrollHeight - this.$refs.innerBody.clientHeight - this.$refs.innerBody.scrollTop <= 50) {
+
+                    // todo 尝试模拟加载数据
+                    this.paging.isLoading = true;
+                    setTimeout(() => {
+                        this.PullUniversityData(++this.paging.now);
+                        this.paging.isLoading = false;
+                        if(this.paging.now >= this.paging.total) {
+                            this.paging.isLast = true;
+                        }
+                    }, 2000);
+
+                }
             });
+
+            this.PullUniversityData(1);
         }
     }
 </script>
@@ -359,6 +321,7 @@
             & > .inner-header {
                 height: auto;
                 padding: 20px 20px 10px 20px;
+                border-bottom: 1px solid rgba(45, 45, 45, 0.20);
                 & > .header-list {
                     & > .list-search {
                         margin-bottom: 10px;
@@ -470,7 +433,7 @@
 
             & > .inner-body {
                 height: calc(~"100% - 110px");
-                padding: 10px 20px 20px 20px;
+                padding: 20px;
                 overflow-y: auto;
 
                 & > .body-list {
@@ -480,6 +443,7 @@
                         padding: 10px;
                         margin-bottom: 30px;
                         border-radius: 5px;
+                        cursor: pointer;
                         & > .item-logo {
                             max-width: 120px;
                             margin-bottom: 10px;

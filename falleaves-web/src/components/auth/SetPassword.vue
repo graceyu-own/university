@@ -52,7 +52,7 @@
 
                 this.load = true;
 
-                this.request.AuthSetPassword(
+                this.$request.auth.setPassword(
                     "data",
                     this.form.passwordInput,
                     this.form.passwordInput2,

@@ -76,11 +76,14 @@ export default new Router({
             path: '/center-search-university',
             name: 'centerSearchUniversity',
             component: CenterSearchUniversity,
+            meta: {
+                keepAlive: true
+            }
         },
 
         // 院校的详细信息页
         {
-            path: '/center-search-university-info',
+            path: '/center-search-university-info/:id',
             name: 'centerSearchUniversityInfo',
             component: CenterSearchUniversityInfo,
         },

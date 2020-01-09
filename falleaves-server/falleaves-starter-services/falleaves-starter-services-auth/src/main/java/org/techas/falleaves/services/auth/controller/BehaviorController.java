@@ -14,7 +14,7 @@ public class BehaviorController {
     @Resource
     private IBehaviorService behaviorAuthService;
 
-    @RequestMapping("/checkBehavior")
+    @RequestMapping("/check-behavior")
     public ResponseData<String> checkBehavior() {
 
         if(!this.behaviorAuthService.commonBehavior()){

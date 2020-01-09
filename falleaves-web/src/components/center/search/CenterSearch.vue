@@ -1,7 +1,7 @@
 <template>
     <section id="search-center">
         <div class="center-inner">
-            <div class="inner-header" :class="{'box-shadow-bottom': headerSplit}">
+            <div class="inner-header">
                 <div class="header-title">
                     <span>Search Center</span>
                 </div>

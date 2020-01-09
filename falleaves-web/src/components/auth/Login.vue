@@ -18,7 +18,7 @@
                         </el-row>
                         <el-row v-if="true">
                             <el-col :span="24">
-                                <el-button type="danger" style="width: inherit;" @click="TryBehaviorValid()" v-if="behaviorValidStatus === 1">Touch Verify</el-button>
+                                <el-button type="danger" style="width: inherit;" @click="TryBehavior()" v-if="behaviorValidStatus === 1">Touch Verify</el-button>
                                 <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">Verifying...</el-button>
                                 <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="behaviorValidStatus === 3">Verify Successful</el-button>
                             </el-col>
@@ -64,11 +64,11 @@
 
         methods: {
 
-            TryBehaviorValid: function() {
+            TryBehavior: function() {
 
                 this.behaviorValidStatus = 2;
 
-                this.request.AuthBehavior(
+                this.$request.auth.behavior(
                     r => {
 
                         if(r.codeType !== 200) {
@@ -94,7 +94,7 @@
 
                 this.load = true;
 
-                this.request.AuthLogin(
+                this.$request.auth.login(
                     this.form.identifier,
                     this.form.credential,
                     this.form.behaviorValid,

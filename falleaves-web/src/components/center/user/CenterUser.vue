@@ -1,7 +1,7 @@
 <template>
     <section id="user-center">
         <div class="center-inner">
-            <div class="inner-header" :class="{'box-shadow-bottom': headerSplit}">
+            <div class="inner-header">
                 <div class="header-title">
                     <span>User Center</span>
                 </div>
@@ -45,9 +45,7 @@
         data() {
             return {
 
-                isLogin: this.attr.has("token"),
-                headerSplit: false
-
+                isLogin: this.$common.attr.has("token"),
             }
         },
 
@@ -60,11 +58,6 @@
         },
 
         mounted() {
-
-            this.$refs.innerBody.addEventListener("scroll", () => {
-                this.headerSplit = this.$refs.innerBody.scrollTop >= 20;
-            })
-
         }
     }
 </script>
@@ -83,7 +76,6 @@
 
             & > .inner-header {
                 padding: 30px 20px;
-
                 & > .header-title {
                     font-size: 2.7rem;
                 }

@@ -170,7 +170,7 @@ public class AuthController {
      *
      * @return  ResponseData
      */
-    @RequestMapping("/sendRegisterMail")
+    @RequestMapping("/send-register-mail")
     public ResponseData<String> sendRegisterMail(String email) {
 
         // check 邮箱是否为空
@@ -211,7 +211,7 @@ public class AuthController {
      *
      * @return  ResponseData
      */
-    @RequestMapping("/resetPassword")
+    @RequestMapping("/reset-password")
     public ResponseData<String> resetPassword(String email) {
 
         // check 邮箱是否为空
@@ -248,7 +248,7 @@ public class AuthController {
      *
      * @return ResponseData
      */
-    @RequestMapping("/setPassword")
+    @RequestMapping("/set-password")
     public ResponseData<String> setPassword(String data, String password, String password2) {
 
         if("".equals(data)) {
@@ -309,7 +309,7 @@ public class AuthController {
         return ResponseData.New(HttpCode.COMMON__SUCCESS, "Set password success.");
     }
 
-    @RequestMapping("/checkLogin")
+    @RequestMapping("/check-login")
     public ResponseData<String> isLogin() {
 
         if(!authService.checkLogin()) {
