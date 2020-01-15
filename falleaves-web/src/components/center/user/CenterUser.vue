@@ -93,6 +93,7 @@
                 & > .body-header {
                     min-height: 70px;
                     position: relative;
+                    cursor: pointer;
 
                     & > .header-content {
                         display: inline-block;

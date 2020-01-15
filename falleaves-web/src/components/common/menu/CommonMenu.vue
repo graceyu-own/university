@@ -4,7 +4,7 @@
         <div class="menu-inner">
             <div class="inner-content">
                 <section class="content-buttons" ref="innerButtons">
-                    <span class="buttons-main el-icon-s-grid" @click="ToggleMenuDisplay()"></span>
+                    <span class="buttons-main el-icon-s-grid" @click="toggleMenuDisplay()"></span>
                 </section>
                 <section class="content-header">
                     <div class="header-title">
@@ -70,7 +70,7 @@
 
         methods: {
 
-            ToggleMenuDisplay: function() {
+            toggleMenuDisplay: function() {
 
                 this.menuStatus = !this.menuStatus;
 
@@ -98,7 +98,7 @@
         max-width: 400px;
         height: 100%;
         position: absolute; top: 0;
-        z-index: 50;
+        z-index: var(--common--menu--common-menu);
         transform: translateZ(0);
 
         transition: transform 666ms;

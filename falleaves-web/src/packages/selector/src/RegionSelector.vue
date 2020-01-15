@@ -1,36 +1,38 @@
 <template>
     <section id="common-region-selector" ref="common-region-selector">
-        <div class="selector-inner"  v-loading="loading">
-            <div class="inner-header">
+        <el-row class="selector-inner"  v-loading="loading" ref="inner">
+            <el-col class="inner-header" :span="24" ref="inner-header">
                 <div class="header-title">
-                    <p>Selector</p>
+                    <p>地区选择器</p>
                 </div>
                 <div class="header-close">
-                    <i class="el-icon-close" @click="CloseSelector"></i>
+                    <i class="el-icon-close" @click="closeSelector(false, false)"></i>
                 </div>
                 <div class="header-nav">
                     <el-breadcrumb class="nav-list" separator="/">
-                        <el-breadcrumb-item class="list-item" v-for="(item, index) in dat.nav" v-bind:key="index" @click="Prev(item.id, item.index)">{{item.name}}</el-breadcrumb-item>
+                        <el-breadcrumb-item class="list-item" v-for="(item, index) in dat.nav" v-bind:key="index" @click.native="prev(index, item.id, item.name, item.index)">{{item.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
-            </div>
-            <div class="inner-body">
+            </el-col>
+            <el-col class="inner-body" :span="24" ref="inner-body">
                 <div class="body-selector">
                     <div class="selector-title">
                         <span>请选择省份/地区</span>
                     </div>
                     <el-row class="selector-list">
                         <el-col class="list-item" :span="24" v-for="(item, index) in dat.list" v-bind:key="index">
-                            <span @click="Next(item.id, item.name, index)">{{item.name}}</span>
+                            <span @click="next(item.id, item.name, index)">{{item.name}}</span>
                         </el-col>
                     </el-row>
 
                 </div>
-            </div>
-            <div class="inner-footer">
-
-            </div>
-        </div>
+            </el-col>
+            <el-col class="inner-footer" :span="24" ref="inner-footer">
+                <el-col class="footer-reset">
+                    <el-button type="primary" size="small" @click="closeSelector(true, true)">重置</el-button>
+                </el-col>
+            </el-col>
+        </el-row>
     </section>
 </template>
 
@@ -44,9 +46,8 @@
                 loading: false,
 
                 dat: {
-                    index: 1,
+                    level: 1,
                     nav: [
-
                     ],
                     list: [
 
@@ -57,83 +58,99 @@
 
         methods: {
 
-            CloseSelector: function() {
+            closeSelector: function(isCallback = false, isReset = false) {
+                if(isCallback) {
+                    this.callback(isReset, this.dat.nav);
+                }
                 document.body.removeChild(this.$refs['common-region-selector']);
             },
 
-            QueryAll: function() {
+            resetBody: function() {
+
+                this.$refs['inner-body'].$el.style.height =
+                    (this.$refs['inner'].$el.clientHeight -
+                    (this.$refs['inner-header'].$el.clientHeight + this.$refs['inner-footer'].$el.clientHeight) - 20) + "px";
+                this.$refs['inner-body'].$el.scrollTop = 0;
+            },
+
+            queryAll: function() {
                 this.loading = true;
                 this.$request.region.QueryAll(
                     r => {
                         this.loading = false;
                         this.dat.list = [];
-                        for(let index in r.data.data) {
-                            this.dat.list.push({
-                                name: r.data.data[index].name,
-                                id  : r.data.data[index].id
-                            })
+                        for(let index in r.data) {
+                            if(r.data.hasOwnProperty(index)) {
+                                this.dat.list.push({
+                                    name: r.data[index].name,
+                                    id  : r.data[index].id
+                                })
+                            }
                         }
-
-                        this.dat.index++;
                     }
                 )
             },
 
-            QueryById: function(id, name, index) {
+            queryById: function(id) {
                 this.loading = true;
                 this.$request.region.QueryById(id,
                     r => {
-                        this.loading = false;
-                        this.dat.nav.push({
-                            id      : id,
-                            name    : name,
-                            index   : index
-                        });
-                        this.dat.list = [];
-                        for(let index in r.data.data) {
-                            this.dat.list.push({
-                                name: r.data.data[index].name,
-                                id  : r.data.data[index].id
-                            })
-                        }
 
-                        this.dat.index++;
+                        if(r.data.length === 0) {
+                            this.closeSelector(true, false);
+                        } else {
+                            this.loading = false;
+                            this.dat.list = [];
+                            for(let index in r.data) {
+                                if(r.data.hasOwnProperty(index)) {
+                                    this.dat.list.push({
+                                        name: r.data[index].name,
+                                        id  : r.data[index].id
+                                    })
+                                }
+                            }
+                        }
                     }
                 )
             },
 
-            Next: function(id, name, index) {
+            next: function(id = -1, name = '全国') {
 
-                if (this.dat.index === 1) {
-                    this.QueryAll();
+                this.dat.nav.push({
+                    id      : id,
+                    name    : name,
+                });
+                setTimeout(() => {
+                    this.resetBody();
+                }, 10);
+
+                if (this.dat.level === 1) {
+                    this.queryAll();
                 } else {
-                    this.QueryById(id, name, index);
+                    this.queryById(id);
                 }
 
-                if(this.dat.index > this.level) {
-
-                    this.callback(this.dat.nav);
-                    this.CloseSelector();
+                if(this.dat.level++ > this.level && this.level !== -1) {
+                    this.closeSelector(true, false);
                 }
-
             },
 
-            Prev: function(id, index) {
+            prev: function(arrIndex, id, name) {
 
+                this.dat.level = arrIndex + 1;
+                this.dat.nav.splice(arrIndex, 999);
+                this.next(id, name);
             }
         },
 
         mounted() {
 
-            let t = this.$common.timings.init();
+            let t = this.$common.timings.Init();
             t.startTimings();
 
-            this.Next(-1, "", -1);
+            this.next();
 
             t.stopTimings();
-
-
-
         }
     }
 </script>
@@ -147,7 +164,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 1999;
+        z-index: var(--common--selector--region-selector);
 
         & > .selector-inner {
             width: 100%;
@@ -158,27 +175,26 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            overflow-y: auto;
+            overflow-y: hidden;
 
             & > .inner-header {
                 padding: 20px;
-                position: relative;
                 border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
-                & > .header-title {
-                    text-align: center;
-                    font-size: 1.6rem;
-                }
+                font-size: 1.6rem;
+                text-align: center;
                 & > .header-close {
                     position: absolute;
                     right: 20px;
                     top: 20px;
                     font-size: 1.6rem;
+                    cursor: pointer;
                 }
                 & > .header-nav {
                     padding: 30px 10px 10px 10px;
                     & > .nav-list {
                         & > .list-item {
                             cursor: pointer;
+                            margin-bottom: 10px;
                         }
                     }
 
@@ -186,7 +202,7 @@
             }
 
             & > .inner-body {
-                height: calc(~"100% - 120px");
+                height: calc(~"100% - 180px");
                 padding: 20px;
                 overflow-y: auto;
 
@@ -205,6 +221,15 @@
                             }
                         }
                     }
+                }
+            }
+
+            & > .inner-footer{
+                width: 100%;
+                height: 40px;
+                & > .footer-reset {
+                    padding: 10px 20px;
+                    text-align: right;
                 }
             }
         }

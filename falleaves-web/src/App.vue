@@ -9,10 +9,8 @@
 
 <script>
 
-    export default {
+    export default  {
         name: 'app',
-        components: {
-        },
     }
 </script>
 
@@ -20,6 +18,7 @@
 
     @import "assets/css/common/init";
     @import "assets/css/common/effects";
+    @import "assets/css/common/z-index";
 
     #app {
         width: 100%;

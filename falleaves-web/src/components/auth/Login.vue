@@ -18,13 +18,13 @@
                         </el-row>
                         <el-row v-if="true">
                             <el-col :span="24">
-                                <el-button type="danger" style="width: inherit;" @click="TryBehavior()" v-if="behaviorValidStatus === 1">Touch Verify</el-button>
+                                <el-button type="danger" style="width: inherit;" @click="tryBehavior()" v-if="behaviorValidStatus === 1">Touch Verify</el-button>
                                 <el-button type="warning" style="width: inherit;" disabled icon="el-icon-loading" v-if="behaviorValidStatus === 2">Verifying...</el-button>
                                 <el-button type="success" style="width: inherit;" disabled icon="el-icon-check" v-if="behaviorValidStatus === 3">Verify Successful</el-button>
                             </el-col>
                         </el-row>
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryLogin()">Login</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="tryLogin()">Login</el-button></el-col>
                         </el-row>
                         <el-row class="content-action">
                             <el-col :span="24" style="text-align: right;">
@@ -64,7 +64,7 @@
 
         methods: {
 
-            TryBehavior: function() {
+            tryBehavior: function() {
 
                 this.behaviorValidStatus = 2;
 
@@ -90,7 +90,7 @@
                 )
             },
 
-            TryLogin: function() {
+            tryLogin: function() {
 
                 this.load = true;
 

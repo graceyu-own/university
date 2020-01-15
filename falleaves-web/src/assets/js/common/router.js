@@ -15,7 +15,7 @@ import CenterSearchUniversityInfo from "@/components/center/search/university/Ce
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     mode: 'hash',
     routes: [
         // 这是一个测试页面, 一些效果方面的测试可以在此页面调试
@@ -95,4 +95,6 @@ export default new Router({
             component: CenterSearchMajor,
         },
     ]
-})
+});
+
+export default router;

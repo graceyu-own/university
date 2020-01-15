@@ -1,9 +1,12 @@
 import Vue from 'vue'
 
-/**
- * 这是一个window的本地储存类, 用于便捷式操作localStorage
- * @Author Graceyu
- */
+//////////////////////////////////////////////////////////////////
+//
+//  Common-Attr 本地储存类, 用于便捷式操作localStorage
+//
+//  @Author Grace.Yu
+//
+//////////////////////////////////////////////////////////////////
 class Attr {
 
     set (key, value, expire = -1) {
@@ -45,36 +48,41 @@ class Attr {
 //
 //
 //////////////////////////////////////////////////////////////////
-
 class Timings {
 
     constructor() {
-        this.start = 0;
-        this.stop  = 0;
+        this._start = 0;
+        this._stop  = 0;
     }
 
-    static init() {
+    static Init() {
         return new Timings();
     }
 
     startTimings() {
-        this.start = Date.now()
+        this._start = Date.now()
     }
 
     stopTimings() {
-        this.stop = Date.now();
+        this._stop = Date.now();
     }
 
     calc() {
         return {
-            milliseconds    : this.stop - this.start,
-            seconds         : (this.stop - this.start) / 1000,
-            minutes         : (this.stop - this.start) / 1000 / 60
+            milliseconds    : this._stop - this._start,
+            seconds         : (this._stop - this._start) / 1000,
+            minutes         : (this._stop - this._start) / 1000 / 60
         }
     }
 
 }
 
+//////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+//////////////////////////////////////////////////////////////////
 class Timeout {
 
     constructor(timeout = 100000, callback = () => {}) {
@@ -87,11 +95,66 @@ class Timeout {
     }
 }
 
+//////////////////////////////////////////////////////////////////
+//
+//  Common-Utils 工具类, 一些常用的方法
+//
+//  @Author Grace.Yu
+//
+//////////////////////////////////////////////////////////////////
+class Watch {
+
+    /**
+     * 监听屏幕大小发生变化
+     *
+     * @param callback(width, height)   回调函数
+     * @param period                    监听频率(毫秒为单位, default = 250)
+     */
+    watchWindow(callback, period = 250) {
+        this.watchElement(window, callback, period);
+    }
+
+    /**
+     * 监听元素大小发生变化
+     *
+     * @param element                   需要监听的元素
+     * @param callback(width, height)   回调函数
+     * @param period                    监听频率(毫秒为单位)
+     */
+    watchElement(element, callback, period) {
+
+        let width = document.body.offsetWidth;
+        let height = document.body.offsetHeight;
+        let timer = null;
+
+        callback(width, height);
+
+        window.addEventListener("resize", () => {
+            if(timer) clearTimeout(timer);
+
+            timer = setTimeout(() => {
+                width = document.body.offsetWidth;
+                height = document.body.offsetHeight;
+                callback(width, height);
+            }, period);
+        })
+    }
+}
+
+
 function registry() {
     Vue.prototype.$common = {
-        attr    : new Attr(),
-        timings : Timings,
-        timeout : Timeout
+
+        // use singleton class
+        attr        : new Attr(),
+        watch       : new Watch(),
+
+        // use static method Init()
+        timings     : Timings,
+
+        // default
+        timeout     : Timeout,
+
     }
 }
 

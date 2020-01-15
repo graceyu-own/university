@@ -3,15 +3,19 @@ import RegionSelector from "./src/RegionSelector";
 
 const RegionSelectorConstructor = Vue.extend(RegionSelector);
 
-function showRegionSelector(level = 1, callback = () => {}) {
+/**
+ *
+ * @param level     最大选择层级(-1为无限)
+ * @param callback  回调函数
+ *  -> isReset: 是否是重置操作
+ *  -> nav    : 被选择的导航列表
+ * @returns
+ */
+function showRegionSelector(level = 3, callback = () => {}) {
     const regionSelectorDOM = new RegionSelectorConstructor({
         el: document.createElement("div"),
         data() {
             return {
-                /**
-                 * 地区筛选器筛选层级
-                 *     * If level is 1: select only first layer
-                 */
                 level: level
             }
         },

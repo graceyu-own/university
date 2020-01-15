@@ -78,7 +78,6 @@
 
         data() {
             return {
-                isLogin: this.attr.has("token"),
             }
         }
     }

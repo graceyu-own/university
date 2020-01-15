@@ -16,7 +16,7 @@
                         <el-row class="content-email">
                             <el-col :span="24">
                                 <el-input v-model="form.emailInput" placeholder="Email" clearable>
-                                    <el-button slot="append" type="primary" :loading="emailBtnLoading" @click="TrySendRegisterMail()">{{emailBtnText}}</el-button>
+                                    <el-button slot="append" type="primary" :loading="emailBtnLoading" @click="trySendRegisterMail()">{{emailBtnText}}</el-button>
                                 </el-input>
                             </el-col>
                         </el-row>
@@ -33,7 +33,7 @@
                             <el-col :span="24"><el-button type="danger" style="width: inherit;" disabled>Touch Verify</el-button></el-col>
                         </el-row>-->
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TryRegister()">Register</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="tryRegister()">Register</el-button></el-col>
                         </el-row>
                         <el-row class="content-action">
                             <el-col :span="24" style="text-align: right;">
@@ -74,7 +74,7 @@
 
         methods: {
 
-            TryRegister: function() {
+            tryRegister: function() {
 
                 this.load = true;
 
@@ -116,9 +116,9 @@
             },
 
             // try send mail if not within the cooling time
-            TrySendRegisterMail: function() {
+            trySendRegisterMail: function() {
 
-                this.SetEmailValidButtonStatus(1);
+                this.setEmailValidButtonStatus(1);
 
                 this.$request.auth.sendRegisterMail(
                     this.form.emailInput,
@@ -127,7 +127,7 @@
 
                         // failed
                         if(r.codeType !== 200) {
-                            this.SetEmailValidButtonStatus(0);
+                            this.setEmailValidButtonStatus(0);
                             this.$notify.error({
                                 message: r.data,
                                 duration: 2000
@@ -135,7 +135,7 @@
 
                         // success
                         } else {
-                            this.SetEmailValidButtonStatus(2);
+                            this.setEmailValidButtonStatus(2);
                             this.$notify.success({
                                 message: r.data,
                                 duration: 2000
@@ -154,7 +154,7 @@
                 )
             },
 
-            SetEmailValidButtonStatus(status) {
+            setEmailValidButtonStatus(status) {
 
                 switch (status) {
                     case 0:

@@ -1,7 +1,7 @@
 <template>
     <section id="backHeader">
         <div class="backHeader-backButton">
-            <span class="el-icon-arrow-left" @click="ToBack()"><span style="font-weight: normal">Back</span></span>
+            <span class="el-icon-arrow-left" @click="toBack()"><span style="font-weight: normal">Back</span></span>
         </div>
         <div class="backHeader-title">
             <span>FALLEAVES</span>
@@ -15,7 +15,7 @@
 
         methods: {
 
-            ToBack: function() {
+            toBack: function() {
                 this.$router.go(-1);
             }
         }
@@ -32,6 +32,7 @@
         left: 0;
         border-bottom: 0.43px solid rgba(0, 0, 0, 0.2);
         background-color: rgba(255, 255, 255, 1);
+        z-index: var(--common--header--back-header);
 
         & > .backHeader-backButton {
             height: 100%;

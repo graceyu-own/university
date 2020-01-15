@@ -17,7 +17,7 @@
                             <el-col :span="24"><el-input v-model="form.passwordInput2" placeholder="Confirm New Password" clearable /></el-col>
                         </el-row>
                         <el-row class="content-buttons">
-                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="TrySetPassword()">Submit</el-button></el-col>
+                            <el-col :span="24"><el-button type="primary" style="width: 100%;" @click="trySetPassword()">Submit</el-button></el-col>
                         </el-row>
                     </section>
                 </div>
@@ -48,7 +48,7 @@
         },
 
         methods: {
-            TrySetPassword: function () {
+            trySetPassword: function () {
 
                 this.load = true;
 

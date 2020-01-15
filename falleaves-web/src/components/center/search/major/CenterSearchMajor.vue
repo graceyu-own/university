@@ -379,7 +379,7 @@
                             & > .sort-menu {
                                 position: fixed;
                                 left: 0;
-                                z-index: 98;
+                                z-index: var(--center--search--major-sort-menu);
                                 width: 100%;
                                 height: 100%;
                                 max-height: calc(~"100vh - 145px");
@@ -417,7 +417,7 @@
                                 width: 100%;
                                 height: 100%;
                                 background-color: rgba(47, 47, 47, 0.2);
-                                z-index: 99;
+                                z-index: var(--center--search--major-filter-menu);
                                 & > .menu-content {
                                     position: absolute;
                                     right: 0;

@@ -23,13 +23,13 @@
                         <el-col class="condition-item condition-sort" :span="12">
 
                             <!-- 条件-排序-按钮 -->
-                            <div class="item-content color-hover" @click="ToggleSortMenuDisplay(null)">
+                            <div class="item-content color-hover" @click="toggleSortMenuDisplay(null)">
                                 <span>排序</span>
                                 <i class="el-icon-caret-bottom"></i>
                             </div>
 
                             <!-- 条件-排序-菜单 -->
-                            <div class="sort-menu" v-if="sortMenuDisplay" @click="ToggleSortMenuDisplay(null)">
+                            <div class="sort-menu" v-if="sortMenuDisplay" @click="toggleSortMenuDisplay(null)">
                                 <div class="menu-content" @click.stop="() => {}">
                                     <el-row class="content-list">
                                         <el-col class="list-item color-hover" :span="24">
@@ -82,13 +82,13 @@
                         <el-col class="condition-item condition-filter" :span="12">
 
                             <!-- 条件-过滤-按钮 -->
-                            <div class="item-content" @click="ToggleFilterMenuDisplay(null)">
+                            <div class="item-content" @click="toggleFilterMenuDisplay(null)">
                                 <span>筛选</span>
                                 <i class="el-icon-caret-bottom"></i>
                             </div>
 
                             <!-- 条件-过滤-菜单 -->
-                            <div class="filter-menu" v-if="filterMenuDisplay" @click="ToggleFilterMenuDisplay(null)">
+                            <div class="filter-menu" v-if="filterMenuDisplay" @click="toggleFilterMenuDisplay(null)">
                                 <div class="menu-content" @click.stop="() => {}">
                                     <div class="content-body">
                                         <div class="body-section body-nature">
@@ -96,15 +96,40 @@
                                                 <span>院校性质</span>
                                             </div>
                                             <el-row class="section-list" :gutter="10">
-                                                <el-col class="list-item" :span="8">
-                                                    <el-tag type="info">双一流</el-tag>
-                                                </el-col>
-                                                <el-col class="list-item" :span="8">
-                                                    <el-tag type="info">985</el-tag>
-                                                </el-col>
-                                                <el-col class="list-item" :span="8">
-                                                    <el-tag type="info">211</el-tag>
-                                                </el-col>
+                                                <el-checkbox-group class="list-checkbox-group" v-model="universityNatureCheckbox" size="small">
+                                                    <el-col class="group-item" :span="8">
+                                                        <el-checkbox-button class="item-button" :label="1">双一流</el-checkbox-button>
+                                                    </el-col>
+                                                    <el-col class="group-item" :span="8">
+                                                        <el-checkbox-button class="item-button" type="warning" :label="2">985</el-checkbox-button>
+                                                    </el-col>
+                                                    <el-col class="group-item" :span="8">
+                                                        <el-checkbox-button class="item-button" :label="3">211</el-checkbox-button>
+                                                    </el-col>
+                                                </el-checkbox-group>
+
+                                            </el-row>
+                                        </div>
+                                        <div class="body-section body-tag">
+                                            <div class="section-title">
+                                                <span>院校标签</span>
+                                            </div>
+                                            <el-row class="section-list" :gutter="10">
+                                                <el-checkbox-group class="list-checkbox-group" v-model="universityTagCheckbox" size="small">
+                                                    <el-col class="group-item" :span="8">
+                                                        <el-checkbox-button class="item-button" :label="1">知名院校</el-checkbox-button>
+                                                    </el-col>
+                                                    <el-col class="group-item" :span="8">
+                                                        <el-checkbox-button class="item-button" :label="2">氛围好</el-checkbox-button>
+                                                    </el-col>
+                                                    <el-col class="group-item" :span="8">
+                                                        <el-checkbox-button class="item-button" :label="3">环境好</el-checkbox-button>
+                                                    </el-col>
+                                                    <el-col class="group-item" :span="8">
+                                                        <el-checkbox-button class="item-button" :label="4">环境好</el-checkbox-button>
+                                                    </el-col>
+                                                </el-checkbox-group>
+
                                             </el-row>
                                         </div>
                                         <div class="body-section body-location">
@@ -112,8 +137,8 @@
                                                 <span>院校地区</span>
                                             </div>
                                             <el-row class="section-list" :gutter="10">
-                                                <el-col class="list-item" :span="8">
-                                                    <el-tag type="info" @click.native="test">请选择</el-tag>
+                                                <el-col class="list-item" :span="24" style="text-align: left;">
+                                                    <el-button type="danger" icon="el-icon-search" size="small" style="" @click="openRegionSelector">{{locationSelectorName}}</el-button>
                                                 </el-col>
                                             </el-row>
                                         </div>
@@ -136,42 +161,44 @@
             <div class="inner-body" ref="innerBody">
 
                 <!-- 院校卡片列表 -->
-                <el-row class="body-list">
+                <el-row class="body-layout" :gutter="20">
 
                     <!-- 院校卡片项 -->
-                    <el-col class="list-item" :span="24" v-for="(item, i) in paging.list" v-bind:key="i" @click.native="ToUniversityInfo(item.id)">
-                        <el-col class="item-logo" :span="8">
-                            <img :src="item.logo" alt="">
-                        </el-col>
-                        <el-col class="item-content" :span="16">
-                            <el-col class="content-title" :span="24">
-                                <span>{{item.name}}</span>
+                    <el-col class="layout-item" :span="layout.universityItem" v-for="(item, i) in paging.list" v-bind:key="i" @click.native="toUniversityInfo(item.id)">
+                        <el-row class="item-layout">
+                            <el-col class="layout-item layout-logo" :span="8">
+                                <img :src="item.logo" alt="">
                             </el-col>
-                            <el-col class="content-nature" :span="24">
-                                <el-tag size="mini" v-for="(nature, i) in item.nature" v-bind:key="i">{{nature}}</el-tag>
+                            <el-col class="layout-item layout-content" :span="16">
+                                <el-col class="content-title" :span="24">
+                                    <span>{{item.name}}</span>
+                                </el-col>
+                                <el-col class="content-nature" :span="24">
+                                    <el-tag size="mini" v-for="(nature, i) in item.nature" v-bind:key="i">{{nature}}</el-tag>
+                                </el-col>
+                                <el-col class="content-property" :span="24">
+                                    <el-tag size="mini" type="warning">{{item.property.hot}}人气</el-tag>
+                                    <el-tag size="mini" type="warning">{{item.property.score}}评分</el-tag>
+                                </el-col>
+                                <el-col class="content-tag" :span="24">
+                                    <el-tag size="mini" type="success" v-for="(tag, i) in item.tag" v-bind:key="i">{{tag}}</el-tag>
+                                </el-col>
                             </el-col>
-                            <el-col class="content-property" :span="24">
-                                <el-tag size="mini" type="warning">{{item.property.hot}}人气</el-tag>
-                                <el-tag size="mini" type="warning">{{item.property.score}}评分</el-tag>
+                            <el-col class="layout-item layout-hotMajor" :span="24">
+                                <el-col class="hotMajor-button" :span="layout.universityItemButton">
+                                    <el-button size="mini" plain>软件工程</el-button>
+                                </el-col>
+                                <el-col class="hotMajor-button" :span="layout.universityItemButton">
+                                    <el-button size="mini" plain>网络工程</el-button>
+                                </el-col>
+                                <el-col class="hotMajor-button" :span="layout.universityItemButton">
+                                    <el-button size="mini" plain>建筑工程</el-button>
+                                </el-col>
+                                <el-col class="hotMajor-button" :span="layout.universityItemButton">
+                                    <el-button size="mini" plain>我就是喜欢工程</el-button>
+                                </el-col>
                             </el-col>
-                            <el-col class="content-tag" :span="24">
-                                <el-tag size="mini" type="success" v-for="(tag, i) in item.tag" v-bind:key="i">{{tag}}</el-tag>
-                            </el-col>
-                        </el-col>
-                        <el-col class="item-hotMajor" :span="24">
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>软件工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>网络工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>建筑工程</el-button>
-                            </el-col>
-                            <el-col class="hotMajor-button" :span="majorButtonSpan">
-                                <el-button size="mini" plain>我就是喜欢工程</el-button>
-                            </el-col>
-                        </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
 
@@ -204,14 +231,18 @@
                 // 登录状态
                 isLogin: this.$common.attr.has("token"),
 
-
-                headerSplit: false,
-
-                majorButtonSpan: 12,
+                layout: {
+                    universityItem: 12,
+                    universityItemButton: 12
+                },
 
                 sortMenuDisplay: false,
                 filterMenuDisplay: false,
                 isPageLast: false,
+
+                universityNatureCheckbox: [],
+                universityTagCheckbox   : [],
+                locationSelectorName    : "选择",
 
                 paging: {
                     size        : 10,
@@ -229,31 +260,37 @@
 
         methods: {
 
-            test: function() {
-                this.$selector.region(3, (nav) => {
-                    console.log(nav)
+            openRegionSelector: function() {
+                this.$selector.region(2, (isReset, nav) => {
+                    if(isReset) {
+                        this.locationSelectorName = "选择";
+                    } else {
+                        if(nav.length === 3) {
+                            this.locationSelectorName = nav[1].name + "-" + nav[2].name;
+                        }
+                    }
                 });
             },
 
-            ToggleSortMenuDisplay: function(display = null) {
+            toggleSortMenuDisplay: function(display = null) {
                 if(null == display) {
                     this.sortMenuDisplay = !this.sortMenuDisplay;
-                    this.ToggleFilterMenuDisplay(false);
+                    this.toggleFilterMenuDisplay(false);
                 } else {
                     this.sortMenuDisplay = display;
                 }
             },
 
-            ToggleFilterMenuDisplay: function(display = null) {
+            toggleFilterMenuDisplay: function(display = null) {
                 if(null == display) {
                     this.filterMenuDisplay = !this.filterMenuDisplay;
-                    this.ToggleSortMenuDisplay(false);
+                    this.toggleSortMenuDisplay(false);
                 } else {
                     this.filterMenuDisplay = display;
                 }
             },
 
-            PullUniversityData: function(page) {
+            pullUniversityData: function(page) {
 
                 // todo 模拟数据
                 for(let i = 0; i < 10; i++) {
@@ -271,7 +308,7 @@
                 }
             },
 
-            ToUniversityInfo: function(id) {
+            toUniversityInfo: function(id) {
                 this.$store.state.university.bodyScrollTop = this.$refs.innerBody.scrollTop;
                 this.$router.push("/center-search-university-info/" + id);
             }
@@ -282,7 +319,6 @@
         },
 
         mounted() {
-
             this.$refs.innerBody.addEventListener("scroll", () => {
 
                 if(!this.paging.isLoading && !this.paging.isLast && this.$refs.innerBody.scrollHeight - this.$refs.innerBody.clientHeight - this.$refs.innerBody.scrollTop <= 50) {
@@ -290,7 +326,7 @@
                     // todo 尝试模拟加载数据
                     this.paging.isLoading = true;
                     setTimeout(() => {
-                        this.PullUniversityData(++this.paging.now);
+                        this.pullUniversityData(++this.paging.now);
                         this.paging.isLoading = false;
                         if(this.paging.now >= this.paging.total) {
                             this.paging.isLast = true;
@@ -300,7 +336,28 @@
                 }
             });
 
-            this.PullUniversityData(1);
+            this.pullUniversityData(1);
+
+            this.$common.watch.watchWindow((width) => {
+
+                // 调整university button
+                if(width <= 500) {
+                    this.layout.universityItemButton = 24;
+                } else if(width > 500 && width <= 1600) {
+                    this.layout.universityItemButton = 12;
+                } else {
+                    this.layout.universityItemButton = 6;
+                }
+
+                // 调整university item
+                if(width <= 600) {
+                    this.layout.universityItem = 24;
+                } else if(width > 600 && width <= 1400) {
+                    this.layout.universityItem = 12;
+                } else {
+                    this.layout.universityItem = 8;
+                }
+            })
         }
     }
 </script>
@@ -345,7 +402,7 @@
                             & > .sort-menu {
                                 position: fixed;
                                 left: 0;
-                                z-index: 98;
+                                z-index: var(--center--search--university-sort-menu);
                                 width: 100%;
                                 height: 100%;
                                 max-height: calc(~"100vh - 145px");
@@ -383,7 +440,7 @@
                                 width: 100%;
                                 height: 100%;
                                 background-color: rgba(47, 47, 47, 0.2);
-                                z-index: 99;
+                                z-index: var(--center--search--university-filter-menu);
                                 & > .menu-content {
                                     position: absolute;
                                     right: 0;
@@ -405,11 +462,15 @@
                                                 margin-bottom: 10px;
                                             }
                                             & > .section-list {
-                                                & > .list-item {
-                                                    & > span {
-                                                        display: inline-block;
-                                                        width: 100%;
-                                                        text-align: center;
+                                                & > .list-checkbox-group {
+                                                    & > .group-item {
+                                                        margin-bottom: 10px;
+                                                        & /deep/ * {
+                                                            display: inline-block;
+                                                            width: 100%;
+                                                            text-align: center;
+                                                            border-radius: 5px;
+                                                        }
                                                     }
                                                 }
                                             }
@@ -436,64 +497,66 @@
                 padding: 20px;
                 overflow-y: auto;
 
-                & > .body-list {
+                & > .body-layout {
 
-                    & > .list-item {
-                        box-shadow: 0 0 10px rgba(47, 47, 47, 0.3);
-                        padding: 10px;
-                        margin-bottom: 30px;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        & > .item-logo {
-                            max-width: 120px;
-                            margin-bottom: 10px;
-                            & > img {
-                                width: 100%;
-                                height: 100%;
-                            }
-                        }
-                        & > .item-content {
-                            padding-left: 20px;
-                            & > div {
-                                margin-bottom: 5px;
-                            }
-                            & > .content-title {
-                                font-size: 2rem;
+                    & > .layout-item {
+                        & > .item-layout {
+                            box-shadow: 0 0 10px rgba(47, 47, 47, 0.3);
+                            padding: 10px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            margin-bottom: 30px;
+                            & > .layout-logo {
+                                max-width: 120px;
                                 margin-bottom: 10px;
-                            }
-                            & > .content-nature {
-                                & > span {
-                                    display: inline-block;
-                                    min-width: 40px;
-                                    text-align: center;
-                                    margin-right: 5px;
-                                    margin-bottom: 5px;
-                                }
-                            }
-                            & > .content-property {
-                                & > span {
-                                    display: inline-block;
-                                    min-width: 40px;
-                                    text-align: center;
-                                    margin-right: 5px;
-                                    margin-bottom: 5px;
-                                }
-                            }
-                            & > .content-tag {
-                                & > span {
-                                    display: inline-block;
-                                    min-width: 40px;
-                                    text-align: center;
-                                    margin-right: 5px;
-                                    margin-bottom: 5px;
-                                }
-                            }
-                        }
-                        & > .item-hotMajor {
-                            & > .hotMajor-button {
-                                padding: 5px;
-                                & > button {
+                                & > img {
                                     width: 100%;
+                                    height: 100%;
+                                }
+                            }
+                            & > .layout-content {
+                                padding-left: 20px;
+                                & > div {
+                                    margin-bottom: 5px;
+                                }
+                                & > .content-title {
+                                    font-size: 2rem;
+                                    margin-bottom: 10px;
+                                }
+                                & > .content-nature {
+                                    & > span {
+                                        display: inline-block;
+                                        min-width: 40px;
+                                        text-align: center;
+                                        margin-right: 5px;
+                                        margin-bottom: 5px;
+                                    }
+                                }
+                                & > .content-property {
+                                    & > span {
+                                        display: inline-block;
+                                        min-width: 40px;
+                                        text-align: center;
+                                        margin-right: 5px;
+                                        margin-bottom: 5px;
+                                    }
+                                }
+                                & > .content-tag {
+                                    & > span {
+                                        display: inline-block;
+                                        min-width: 40px;
+                                        text-align: center;
+                                        margin-right: 5px;
+                                        margin-bottom: 5px;
+                                    }
+                                }
+                            }
+                            & > .layout-hotMajor {
+                                & > .hotMajor-button {
+                                    padding: 5px;
+                                    & > button {
+                                        width: 100%;
+                                    }
                                 }
                             }
                         }

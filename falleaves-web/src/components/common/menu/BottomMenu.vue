@@ -52,6 +52,7 @@
         position: fixed;
         bottom: 0;
         left: 0;
+        z-index: var(--common--menu--bottom-menu);
         background-color:rgba(255, 255, 255, 0.94);
         box-shadow: 0 0 10px rgba(47, 47, 47, 0.1);
 

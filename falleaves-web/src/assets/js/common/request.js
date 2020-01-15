@@ -151,7 +151,7 @@ class RegionRequest extends Request{
                 Authorization: "APPCODE 30e0f184da5c4ed3ba0afb3fbaf24364"
             }
         }).then(r => {
-            fn(r)
+            fn(r.data)
         }).catch(error => {
             errorfn(error);
         }).finally(() => {
@@ -167,7 +167,7 @@ class RegionRequest extends Request{
                 Authorization: "APPCODE 30e0f184da5c4ed3ba0afb3fbaf24364"
             }
         }).then(r => {
-            fn(r)
+            fn(r.data)
         }).catch(error => {
             errorfn(error);
         }).finally(() => {
