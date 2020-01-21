@@ -1,6 +1,8 @@
 <template>
     <section id="info">
-        <common-header></common-header>
+
+        <fl-header-default title="FALLEAVES"></fl-header-default>
+
         <div class="info-inner">
             <p>{{msg}}</p>
         </div>
@@ -9,11 +11,8 @@
 
 <script>
 
-    import CommonHeader from "@/components/common/header/CommonHeader";
-
     export default {
         name: "Info",
-        components: {CommonHeader},
 
         data(){
             return {

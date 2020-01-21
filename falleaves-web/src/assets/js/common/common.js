@@ -97,7 +97,7 @@ class Timeout {
 
 //////////////////////////////////////////////////////////////////
 //
-//  Common-Utils 工具类, 一些常用的方法
+//  Common-Watch 监听类, 元素的监听, 目前只能监听宽度和高度
 //
 //  @Author Grace.Yu
 //
@@ -110,8 +110,8 @@ class Watch {
      * @param callback(width, height)   回调函数
      * @param period                    监听频率(毫秒为单位, default = 250)
      */
-    watchWindow(callback, period = 250) {
-        this.watchElement(window, callback, period);
+    watchWindowSize(callback, period = 250) {
+        this.watchElementSize(window, callback, period);
     }
 
     /**
@@ -121,12 +121,12 @@ class Watch {
      * @param callback(width, height)   回调函数
      * @param period                    监听频率(毫秒为单位)
      */
-    watchElement(element, callback, period) {
+    watchElementSize(element, callback, period) {
 
         let width = document.body.offsetWidth;
         let height = document.body.offsetHeight;
-        let timer = null;
 
+        let timer = null;
         callback(width, height);
 
         window.addEventListener("resize", () => {
@@ -139,6 +139,40 @@ class Watch {
             }, period);
         })
     }
+
+    watchElementScroll(element, callback, period) {
+        let top = element.scrollTop;
+        let left = element.scrollLeft;
+
+        let timer = null;
+        callback(top, left);
+
+        element.addEventListener("scroll", () => {
+            if(timer) clearTimeout(timer);
+
+            timer = setTimeout(() => {
+                top = element.scrollTop;
+                left = element.scrollLeft;
+                callback(top, left);
+            }, period);
+        })
+
+    }
+}
+
+class UniqueIdManager {
+
+    constructor() {
+        this.id = 1;
+    }
+
+    now() {
+        return this.id;
+    }
+
+    next() {
+        return this.id++;
+    }
 }
 
 
@@ -148,6 +182,7 @@ function registry() {
         // use singleton class
         attr        : new Attr(),
         watch       : new Watch(),
+        uniqueIdManager : new UniqueIdManager(),
 
         // use static method Init()
         timings     : Timings,

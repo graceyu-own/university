@@ -1,17 +1,18 @@
 import Vue from 'vue'
 
 import Router from 'vue-router'
-import Index from "@/components/Index";
-import Login from "@/components/auth/Login";
-import Register from "@/components/auth/Register";
-import Center from "@/components/center/Center";
-import ResetPassword from "@/components/auth/ResetPassword";
-import SetPassword from "@/components/auth/SetPassword";
+import Index from "@/components/index";
+import Login from "@/components/auth/login";
+import Register from "@/components/auth/register";
+import Center from "@/components/center/center";
+import ResetPassword from "@/components/auth/reset-password";
+import SetPassword from "@/components/auth/set-password";
 import Info from "@/components/info/Info";
-import Test from "@/components/Test";
-import CenterSearchUniversity from "@/components/center/search/university/CenterSearchUniversity";
-import CenterSearchMajor from "@/components/center/search/major/CenterSearchMajor";
-import CenterSearchUniversityInfo from "@/components/center/search/university/CenterSearchUniversityInfo";
+import Test from "@/components/test";
+import CenterSearchUniversity from "@/components/center/search/university/center-search-university";
+import CenterSearchMajor from "@/components/center/search/major/center-search-major";
+import CenterSearchUniversityInfo from "@/components/center/search/university/center-search-university-info";
+import CenterUserInfo from "@/components/center/user/center-user-info";
 
 Vue.use(Router);
 
@@ -94,7 +95,49 @@ const router = new Router({
             name: 'centerSearchMajor',
             component: CenterSearchMajor,
         },
+
+        {
+            path: '/center-user-info',
+            name: 'centerUserInfo',
+            component: CenterUserInfo,
+        }
     ]
 });
+
+export const routerMethods = class {
+
+    static Init() {
+
+        Vue.directive('routers', {
+            inserted: ((el, binding) => {
+
+                switch(binding.arg) {
+                    default:
+                    case 'back':
+                        el.addEventListener("click", () => {
+                            router.back()
+                        });
+                        break;
+                    case 'go':
+                        el.addEventListener("click", () => {
+                            router.go(parseInt(binding.value))
+                        });
+                        break;
+                    case 'push':
+                        el.addEventListener("click", () => {
+                            router.push(binding.value)
+                        });
+                        break;
+                    case 'replace':
+                        el.addEventListener("click", () => {
+                            router.replace(binding.value)
+                        });
+                        break;
+                }
+            })
+        });
+
+    }
+};
 
 export default router;
